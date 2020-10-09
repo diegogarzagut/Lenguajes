@@ -2,6 +2,7 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    CHAR
     NUMBER
 
 Grammar
@@ -50,23 +51,22 @@ Rule 40    IDCTE -> CTE_INT
 Rule 41    IDCTE -> CTE_FL
 Rule 42    TIPO -> INT
 Rule 43    TIPO -> FL
-Rule 44    TIPO -> CHAR
-Rule 45    L -> ID OPRL ID
-Rule 46    L -> LPAREN D RPAREN
-Rule 47    D -> L
-Rule 48    D -> L D1
-Rule 49    D1 -> OR L
-Rule 50    D1 -> AND L
-Rule 51    D1 -> <empty>
-Rule 52    OPRL -> GT
-Rule 53    OPRL -> LT
-Rule 54    OPRL -> ET
+Rule 44    L -> ID OPRL ID
+Rule 45    L -> LPAREN D RPAREN
+Rule 46    D -> L
+Rule 47    D -> L D1
+Rule 48    D1 -> OR L
+Rule 49    D1 -> AND L
+Rule 50    D1 -> <empty>
+Rule 51    OPRL -> GT
+Rule 52    OPRL -> LT
+Rule 53    OPRL -> ET
 
 Terminals, with rules where they appear
 
-AND                  : 50
+AND                  : 49
 BEGIN                : 13 29
-CHAR                 : 44
+CHAR                 : 
 COLON                : 7
 COMA                 : 10
 CTE_FL               : 41
@@ -76,23 +76,23 @@ DWHILE               : 20
 ELSE                 : 24
 END                  : 11 13 19 20 21 30
 EQUAL                : 5 10
-ET                   : 54
+ET                   : 53
 FL                   : 43
 FOR                  : 21
 FUNCTION             : 11
-GT                   : 52
-ID                   : 5 10 11 39 45 45
+GT                   : 51
+ID                   : 5 10 11 39 44 44
 IF                   : 18
 INT                  : 42
-LPAREN               : 2 11 18 19 21 32 46
-LT                   : 53
+LPAREN               : 2 11 18 19 21 32 45
+LT                   : 52
 MAIN                 : 2 28
 MINUS                : 35
 NUMBER               : 
-OR                   : 49
+OR                   : 48
 PIPE                 : 21 21
 PLUS                 : 34
-RPAREN               : 2 11 18 19 21 32 46
+RPAREN               : 2 11 18 19 21 32 45
 SEMICOLON            : 5 15 26
 THEN                 : 18
 TIMES                : 37
@@ -104,17 +104,17 @@ Nonterminals, with rules where they appear
 
 BLOQUE               : 3 4 11 22
 BR                   : 13 15
-D                    : 46
-D1                   : 48
+D                    : 45
+D1                   : 47
 DW1                  : 20 26
 E                    : 32 34 35
 ESTATUTO             : 13 15 18 19 20 20 21 24 26
 F                    : 9 10 36 37 38
 IDCTE                : 31
 IF1                  : 18
-L                    : 18 19 21 47 48 49 50
+L                    : 18 19 21 46 47 48 49
 MODULO               : 2 11
-OPRL                 : 45
+OPRL                 : 44
 S                    : 0
 T                    : 33 34 35 37 38
 TIPO                 : 7
@@ -174,7 +174,6 @@ state 5
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
     FUNCTION        reduce using rule 6 (vars -> .)
     BEGIN           reduce using rule 6 (vars -> .)
@@ -182,7 +181,6 @@ state 5
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
     vars                           shift and go to state 6
     dec1                           shift and go to state 7
@@ -194,24 +192,24 @@ state 6
     (11) MODULO -> . FUNCTION ID LPAREN RPAREN vars BLOQUE END MODULO
     (12) MODULO -> .
 
-    FUNCTION        shift and go to state 13
+    FUNCTION        shift and go to state 12
     BEGIN           reduce using rule 12 (MODULO -> .)
     $end            reduce using rule 12 (MODULO -> .)
 
-    MODULO                         shift and go to state 12
+    MODULO                         shift and go to state 11
 
 state 7
 
     (5) vars -> dec1 . ID EQUAL vars1 SEMICOLON vars
 
-    ID              shift and go to state 14
+    ID              shift and go to state 13
 
 
 state 8
 
     (7) dec1 -> TIPO . COLON
 
-    COLON           shift and go to state 15
+    COLON           shift and go to state 14
 
 
 state 9
@@ -230,13 +228,6 @@ state 10
 
 state 11
 
-    (44) TIPO -> CHAR .
-
-    COLON           reduce using rule 44 (TIPO -> CHAR .)
-
-
-state 12
-
     (2) main -> MAIN LPAREN RPAREN vars MODULO . main1
     (3) main1 -> . BLOQUE
     (4) main1 -> . BLOQUE main1
@@ -244,43 +235,43 @@ state 12
     (14) BLOQUE -> .
 
   ! shift/reduce conflict for BEGIN resolved as shift
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     $end            reduce using rule 14 (BLOQUE -> .)
 
   ! BEGIN           [ reduce using rule 14 (BLOQUE -> .) ]
 
-    main1                          shift and go to state 16
-    BLOQUE                         shift and go to state 17
+    main1                          shift and go to state 15
+    BLOQUE                         shift and go to state 16
 
-state 13
+state 12
 
     (11) MODULO -> FUNCTION . ID LPAREN RPAREN vars BLOQUE END MODULO
 
-    ID              shift and go to state 19
+    ID              shift and go to state 18
 
 
-state 14
+state 13
 
     (5) vars -> dec1 ID . EQUAL vars1 SEMICOLON vars
 
-    EQUAL           shift and go to state 20
+    EQUAL           shift and go to state 19
 
 
-state 15
+state 14
 
     (7) dec1 -> TIPO COLON .
 
     ID              reduce using rule 7 (dec1 -> TIPO COLON .)
 
 
-state 16
+state 15
 
     (2) main -> MAIN LPAREN RPAREN vars MODULO main1 .
 
     $end            reduce using rule 2 (main -> MAIN LPAREN RPAREN vars MODULO main1 .)
 
 
-state 17
+state 16
 
     (3) main1 -> BLOQUE .
     (4) main1 -> BLOQUE . main1
@@ -292,15 +283,15 @@ state 17
   ! shift/reduce conflict for BEGIN resolved as shift
   ! reduce/reduce conflict for $end resolved using rule 3 (main1 -> BLOQUE .)
     $end            reduce using rule 3 (main1 -> BLOQUE .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
 
   ! BEGIN           [ reduce using rule 14 (BLOQUE -> .) ]
   ! $end            [ reduce using rule 14 (BLOQUE -> .) ]
 
-    BLOQUE                         shift and go to state 17
-    main1                          shift and go to state 21
+    BLOQUE                         shift and go to state 16
+    main1                          shift and go to state 20
 
-state 18
+state 17
 
     (13) BLOQUE -> BEGIN . ESTATUTO BR END
     (17) ESTATUTO -> . vars
@@ -318,43 +309,41 @@ state 18
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     SEMICOLON       reduce using rule 6 (vars -> .)
     END             reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! SEMICOLON       [ reduce using rule 23 (ESTATUTO -> .) ]
   ! END             [ reduce using rule 23 (ESTATUTO -> .) ]
   ! SEMICOLON       [ reduce using rule 14 (BLOQUE -> .) ]
   ! END             [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 22
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 21
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 19
+state 18
 
     (11) MODULO -> FUNCTION ID . LPAREN RPAREN vars BLOQUE END MODULO
 
-    LPAREN          shift and go to state 29
+    LPAREN          shift and go to state 28
 
 
-state 20
+state 19
 
     (5) vars -> dec1 ID EQUAL . vars1 SEMICOLON vars
     (9) vars1 -> . F
@@ -365,34 +354,34 @@ state 20
     (40) IDCTE -> . CTE_INT
     (41) IDCTE -> . CTE_FL
 
-    LPAREN          shift and go to state 34
-    ID              shift and go to state 30
-    CTE_INT         shift and go to state 35
-    CTE_FL          shift and go to state 36
+    LPAREN          shift and go to state 33
+    ID              shift and go to state 29
+    CTE_INT         shift and go to state 34
+    CTE_FL          shift and go to state 35
 
-    vars1                          shift and go to state 31
-    F                              shift and go to state 32
-    IDCTE                          shift and go to state 33
+    vars1                          shift and go to state 30
+    F                              shift and go to state 31
+    IDCTE                          shift and go to state 32
 
-state 21
+state 20
 
     (4) main1 -> BLOQUE main1 .
 
     $end            reduce using rule 4 (main1 -> BLOQUE main1 .)
 
 
-state 22
+state 21
 
     (13) BLOQUE -> BEGIN ESTATUTO . BR END
     (15) BR -> . SEMICOLON ESTATUTO BR
     (16) BR -> .
 
-    SEMICOLON       shift and go to state 38
+    SEMICOLON       shift and go to state 37
     END             reduce using rule 16 (BR -> .)
 
-    BR                             shift and go to state 37
+    BR                             shift and go to state 36
 
-state 23
+state 22
 
     (17) ESTATUTO -> vars .
 
@@ -402,21 +391,21 @@ state 23
     ELSE            reduce using rule 17 (ESTATUTO -> vars .)
 
 
-state 24
+state 23
 
     (18) ESTATUTO -> IF . LPAREN L RPAREN THEN ESTATUTO IF1
+
+    LPAREN          shift and go to state 38
+
+
+state 24
+
+    (19) ESTATUTO -> WHILE . LPAREN L RPAREN ESTATUTO END
 
     LPAREN          shift and go to state 39
 
 
 state 25
-
-    (19) ESTATUTO -> WHILE . LPAREN L RPAREN ESTATUTO END
-
-    LPAREN          shift and go to state 40
-
-
-state 26
 
     (20) ESTATUTO -> DWHILE . ESTATUTO DW1 UNTIL ESTATUTO END
     (17) ESTATUTO -> . vars
@@ -434,43 +423,41 @@ state 26
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for UNTIL resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for UNTIL resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     SEMICOLON       reduce using rule 6 (vars -> .)
     UNTIL           reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! SEMICOLON       [ reduce using rule 23 (ESTATUTO -> .) ]
   ! UNTIL           [ reduce using rule 23 (ESTATUTO -> .) ]
   ! SEMICOLON       [ reduce using rule 14 (BLOQUE -> .) ]
   ! UNTIL           [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 41
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 40
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 27
+state 26
 
     (21) ESTATUTO -> FOR . LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO END
 
-    LPAREN          shift and go to state 42
+    LPAREN          shift and go to state 41
 
 
-state 28
+state 27
 
     (22) ESTATUTO -> BLOQUE .
 
@@ -480,14 +467,14 @@ state 28
     ELSE            reduce using rule 22 (ESTATUTO -> BLOQUE .)
 
 
-state 29
+state 28
 
     (11) MODULO -> FUNCTION ID LPAREN . RPAREN vars BLOQUE END MODULO
 
-    RPAREN          shift and go to state 43
+    RPAREN          shift and go to state 42
 
 
-state 30
+state 29
 
     (39) IDCTE -> ID .
 
@@ -500,23 +487,23 @@ state 30
     RPAREN          reduce using rule 39 (IDCTE -> ID .)
 
 
-state 31
+state 30
 
     (5) vars -> dec1 ID EQUAL vars1 . SEMICOLON vars
 
-    SEMICOLON       shift and go to state 44
+    SEMICOLON       shift and go to state 43
 
 
-state 32
+state 31
 
     (9) vars1 -> F .
     (10) vars1 -> F . COMA ID EQUAL vars1
 
     SEMICOLON       reduce using rule 9 (vars1 -> F .)
-    COMA            shift and go to state 45
+    COMA            shift and go to state 44
 
 
-state 33
+state 32
 
     (31) F -> IDCTE .
 
@@ -529,7 +516,7 @@ state 33
     RPAREN          reduce using rule 31 (F -> IDCTE .)
 
 
-state 34
+state 33
 
     (32) F -> LPAREN . E RPAREN
     (33) E -> . T
@@ -544,17 +531,17 @@ state 34
     (40) IDCTE -> . CTE_INT
     (41) IDCTE -> . CTE_FL
 
-    LPAREN          shift and go to state 34
-    ID              shift and go to state 30
-    CTE_INT         shift and go to state 35
-    CTE_FL          shift and go to state 36
+    LPAREN          shift and go to state 33
+    ID              shift and go to state 29
+    CTE_INT         shift and go to state 34
+    CTE_FL          shift and go to state 35
 
-    E                              shift and go to state 46
-    T                              shift and go to state 47
-    F                              shift and go to state 48
-    IDCTE                          shift and go to state 33
+    E                              shift and go to state 45
+    T                              shift and go to state 46
+    F                              shift and go to state 47
+    IDCTE                          shift and go to state 32
 
-state 35
+state 34
 
     (40) IDCTE -> CTE_INT .
 
@@ -567,7 +554,7 @@ state 35
     RPAREN          reduce using rule 40 (IDCTE -> CTE_INT .)
 
 
-state 36
+state 35
 
     (41) IDCTE -> CTE_FL .
 
@@ -580,14 +567,14 @@ state 36
     RPAREN          reduce using rule 41 (IDCTE -> CTE_FL .)
 
 
-state 37
+state 36
 
     (13) BLOQUE -> BEGIN ESTATUTO BR . END
 
-    END             shift and go to state 49
+    END             shift and go to state 48
 
 
-state 38
+state 37
 
     (15) BR -> SEMICOLON . ESTATUTO BR
     (17) ESTATUTO -> . vars
@@ -605,69 +592,67 @@ state 38
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     SEMICOLON       reduce using rule 6 (vars -> .)
     END             reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! SEMICOLON       [ reduce using rule 23 (ESTATUTO -> .) ]
   ! END             [ reduce using rule 23 (ESTATUTO -> .) ]
   ! SEMICOLON       [ reduce using rule 14 (BLOQUE -> .) ]
   ! END             [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 50
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 49
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 39
+state 38
 
     (18) ESTATUTO -> IF LPAREN . L RPAREN THEN ESTATUTO IF1
-    (45) L -> . ID OPRL ID
-    (46) L -> . LPAREN D RPAREN
+    (44) L -> . ID OPRL ID
+    (45) L -> . LPAREN D RPAREN
 
-    ID              shift and go to state 53
-    LPAREN          shift and go to state 51
+    ID              shift and go to state 52
+    LPAREN          shift and go to state 50
 
-    L                              shift and go to state 52
+    L                              shift and go to state 51
 
-state 40
+state 39
 
     (19) ESTATUTO -> WHILE LPAREN . L RPAREN ESTATUTO END
-    (45) L -> . ID OPRL ID
-    (46) L -> . LPAREN D RPAREN
+    (44) L -> . ID OPRL ID
+    (45) L -> . LPAREN D RPAREN
 
-    ID              shift and go to state 53
-    LPAREN          shift and go to state 51
+    ID              shift and go to state 52
+    LPAREN          shift and go to state 50
 
-    L                              shift and go to state 54
+    L                              shift and go to state 53
 
-state 41
+state 40
 
     (20) ESTATUTO -> DWHILE ESTATUTO . DW1 UNTIL ESTATUTO END
     (26) DW1 -> . SEMICOLON ESTATUTO DW1
     (27) DW1 -> .
 
-    SEMICOLON       shift and go to state 56
+    SEMICOLON       shift and go to state 55
     UNTIL           reduce using rule 27 (DW1 -> .)
 
-    DW1                            shift and go to state 55
+    DW1                            shift and go to state 54
 
-state 42
+state 41
 
     (21) ESTATUTO -> FOR LPAREN . vars PIPE L PIPE vars RPAREN ESTATUTO END
     (5) vars -> . dec1 ID EQUAL vars1 SEMICOLON vars
@@ -676,19 +661,17 @@ state 42
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
     PIPE            reduce using rule 6 (vars -> .)
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
-    vars                           shift and go to state 57
+    vars                           shift and go to state 56
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 43
+state 42
 
     (11) MODULO -> FUNCTION ID LPAREN RPAREN . vars BLOQUE END MODULO
     (5) vars -> . dec1 ID EQUAL vars1 SEMICOLON vars
@@ -697,20 +680,18 @@ state 43
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
     BEGIN           reduce using rule 6 (vars -> .)
     END             reduce using rule 6 (vars -> .)
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
-    vars                           shift and go to state 58
+    vars                           shift and go to state 57
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 44
+state 43
 
     (5) vars -> dec1 ID EQUAL vars1 SEMICOLON . vars
     (5) vars -> . dec1 ID EQUAL vars1 SEMICOLON vars
@@ -719,7 +700,6 @@ state 44
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
     FUNCTION        reduce using rule 6 (vars -> .)
     BEGIN           reduce using rule 6 (vars -> .)
@@ -733,38 +713,37 @@ state 44
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
     dec1                           shift and go to state 7
-    vars                           shift and go to state 59
+    vars                           shift and go to state 58
     TIPO                           shift and go to state 8
 
-state 45
+state 44
 
     (10) vars1 -> F COMA . ID EQUAL vars1
 
-    ID              shift and go to state 60
+    ID              shift and go to state 59
 
 
-state 46
+state 45
 
     (32) F -> LPAREN E . RPAREN
 
-    RPAREN          shift and go to state 61
+    RPAREN          shift and go to state 60
 
 
-state 47
+state 46
 
     (33) E -> T .
     (34) E -> T . PLUS E
     (35) E -> T . MINUS E
 
     RPAREN          reduce using rule 33 (E -> T .)
-    PLUS            shift and go to state 62
-    MINUS           shift and go to state 63
+    PLUS            shift and go to state 61
+    MINUS           shift and go to state 62
 
 
-state 48
+state 47
 
     (36) T -> F .
     (37) T -> F . TIMES T
@@ -773,11 +752,11 @@ state 48
     PLUS            reduce using rule 36 (T -> F .)
     MINUS           reduce using rule 36 (T -> F .)
     RPAREN          reduce using rule 36 (T -> F .)
-    TIMES           shift and go to state 64
-    DIVIDE          shift and go to state 65
+    TIMES           shift and go to state 63
+    DIVIDE          shift and go to state 64
 
 
-state 49
+state 48
 
     (13) BLOQUE -> BEGIN ESTATUTO BR END .
 
@@ -789,66 +768,66 @@ state 49
     ELSE            reduce using rule 13 (BLOQUE -> BEGIN ESTATUTO BR END .)
 
 
-state 50
+state 49
 
     (15) BR -> SEMICOLON ESTATUTO . BR
     (15) BR -> . SEMICOLON ESTATUTO BR
     (16) BR -> .
 
-    SEMICOLON       shift and go to state 38
+    SEMICOLON       shift and go to state 37
     END             reduce using rule 16 (BR -> .)
 
-    BR                             shift and go to state 66
+    BR                             shift and go to state 65
+
+state 50
+
+    (45) L -> LPAREN . D RPAREN
+    (46) D -> . L
+    (47) D -> . L D1
+    (44) L -> . ID OPRL ID
+    (45) L -> . LPAREN D RPAREN
+
+    ID              shift and go to state 52
+    LPAREN          shift and go to state 50
+
+    D                              shift and go to state 66
+    L                              shift and go to state 67
 
 state 51
 
-    (46) L -> LPAREN . D RPAREN
-    (47) D -> . L
-    (48) D -> . L D1
-    (45) L -> . ID OPRL ID
-    (46) L -> . LPAREN D RPAREN
+    (18) ESTATUTO -> IF LPAREN L . RPAREN THEN ESTATUTO IF1
 
-    ID              shift and go to state 53
-    LPAREN          shift and go to state 51
+    RPAREN          shift and go to state 68
 
-    D                              shift and go to state 67
-    L                              shift and go to state 68
 
 state 52
 
-    (18) ESTATUTO -> IF LPAREN L . RPAREN THEN ESTATUTO IF1
+    (44) L -> ID . OPRL ID
+    (51) OPRL -> . GT
+    (52) OPRL -> . LT
+    (53) OPRL -> . ET
 
-    RPAREN          shift and go to state 69
+    GT              shift and go to state 70
+    LT              shift and go to state 71
+    ET              shift and go to state 72
 
+    OPRL                           shift and go to state 69
 
 state 53
 
-    (45) L -> ID . OPRL ID
-    (52) OPRL -> . GT
-    (53) OPRL -> . LT
-    (54) OPRL -> . ET
+    (19) ESTATUTO -> WHILE LPAREN L . RPAREN ESTATUTO END
 
-    GT              shift and go to state 71
-    LT              shift and go to state 72
-    ET              shift and go to state 73
+    RPAREN          shift and go to state 73
 
-    OPRL                           shift and go to state 70
 
 state 54
 
-    (19) ESTATUTO -> WHILE LPAREN L . RPAREN ESTATUTO END
+    (20) ESTATUTO -> DWHILE ESTATUTO DW1 . UNTIL ESTATUTO END
 
-    RPAREN          shift and go to state 74
+    UNTIL           shift and go to state 74
 
 
 state 55
-
-    (20) ESTATUTO -> DWHILE ESTATUTO DW1 . UNTIL ESTATUTO END
-
-    UNTIL           shift and go to state 75
-
-
-state 56
 
     (26) DW1 -> SEMICOLON . ESTATUTO DW1
     (17) ESTATUTO -> . vars
@@ -866,54 +845,52 @@ state 56
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for UNTIL resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for UNTIL resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     SEMICOLON       reduce using rule 6 (vars -> .)
     UNTIL           reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! SEMICOLON       [ reduce using rule 23 (ESTATUTO -> .) ]
   ! UNTIL           [ reduce using rule 23 (ESTATUTO -> .) ]
   ! SEMICOLON       [ reduce using rule 14 (BLOQUE -> .) ]
   ! UNTIL           [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 76
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 75
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 57
+state 56
 
     (21) ESTATUTO -> FOR LPAREN vars . PIPE L PIPE vars RPAREN ESTATUTO END
 
-    PIPE            shift and go to state 77
+    PIPE            shift and go to state 76
 
 
-state 58
+state 57
 
     (11) MODULO -> FUNCTION ID LPAREN RPAREN vars . BLOQUE END MODULO
     (13) BLOQUE -> . BEGIN ESTATUTO BR END
     (14) BLOQUE -> .
 
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     END             reduce using rule 14 (BLOQUE -> .)
 
-    BLOQUE                         shift and go to state 78
+    BLOQUE                         shift and go to state 77
 
-state 59
+state 58
 
     (5) vars -> dec1 ID EQUAL vars1 SEMICOLON vars .
 
@@ -928,14 +905,14 @@ state 59
     RPAREN          reduce using rule 5 (vars -> dec1 ID EQUAL vars1 SEMICOLON vars .)
 
 
-state 60
+state 59
 
     (10) vars1 -> F COMA ID . EQUAL vars1
 
-    EQUAL           shift and go to state 79
+    EQUAL           shift and go to state 78
 
 
-state 61
+state 60
 
     (32) F -> LPAREN E RPAREN .
 
@@ -948,7 +925,7 @@ state 61
     RPAREN          reduce using rule 32 (F -> LPAREN E RPAREN .)
 
 
-state 62
+state 61
 
     (34) E -> T PLUS . E
     (33) E -> . T
@@ -963,17 +940,17 @@ state 62
     (40) IDCTE -> . CTE_INT
     (41) IDCTE -> . CTE_FL
 
-    LPAREN          shift and go to state 34
-    ID              shift and go to state 30
-    CTE_INT         shift and go to state 35
-    CTE_FL          shift and go to state 36
+    LPAREN          shift and go to state 33
+    ID              shift and go to state 29
+    CTE_INT         shift and go to state 34
+    CTE_FL          shift and go to state 35
 
-    T                              shift and go to state 47
-    E                              shift and go to state 80
-    F                              shift and go to state 48
-    IDCTE                          shift and go to state 33
+    T                              shift and go to state 46
+    E                              shift and go to state 79
+    F                              shift and go to state 47
+    IDCTE                          shift and go to state 32
 
-state 63
+state 62
 
     (35) E -> T MINUS . E
     (33) E -> . T
@@ -988,17 +965,17 @@ state 63
     (40) IDCTE -> . CTE_INT
     (41) IDCTE -> . CTE_FL
 
-    LPAREN          shift and go to state 34
-    ID              shift and go to state 30
-    CTE_INT         shift and go to state 35
-    CTE_FL          shift and go to state 36
+    LPAREN          shift and go to state 33
+    ID              shift and go to state 29
+    CTE_INT         shift and go to state 34
+    CTE_FL          shift and go to state 35
 
-    T                              shift and go to state 47
-    E                              shift and go to state 81
-    F                              shift and go to state 48
-    IDCTE                          shift and go to state 33
+    T                              shift and go to state 46
+    E                              shift and go to state 80
+    F                              shift and go to state 47
+    IDCTE                          shift and go to state 32
 
-state 64
+state 63
 
     (37) T -> F TIMES . T
     (36) T -> . F
@@ -1010,16 +987,16 @@ state 64
     (40) IDCTE -> . CTE_INT
     (41) IDCTE -> . CTE_FL
 
-    LPAREN          shift and go to state 34
-    ID              shift and go to state 30
-    CTE_INT         shift and go to state 35
-    CTE_FL          shift and go to state 36
+    LPAREN          shift and go to state 33
+    ID              shift and go to state 29
+    CTE_INT         shift and go to state 34
+    CTE_FL          shift and go to state 35
 
-    F                              shift and go to state 48
-    T                              shift and go to state 82
-    IDCTE                          shift and go to state 33
+    F                              shift and go to state 47
+    T                              shift and go to state 81
+    IDCTE                          shift and go to state 32
 
-state 65
+state 64
 
     (38) T -> F DIVIDE . T
     (36) T -> . F
@@ -1031,82 +1008,82 @@ state 65
     (40) IDCTE -> . CTE_INT
     (41) IDCTE -> . CTE_FL
 
-    LPAREN          shift and go to state 34
-    ID              shift and go to state 30
-    CTE_INT         shift and go to state 35
-    CTE_FL          shift and go to state 36
+    LPAREN          shift and go to state 33
+    ID              shift and go to state 29
+    CTE_INT         shift and go to state 34
+    CTE_FL          shift and go to state 35
 
-    F                              shift and go to state 48
-    T                              shift and go to state 83
-    IDCTE                          shift and go to state 33
+    F                              shift and go to state 47
+    T                              shift and go to state 82
+    IDCTE                          shift and go to state 32
 
-state 66
+state 65
 
     (15) BR -> SEMICOLON ESTATUTO BR .
 
     END             reduce using rule 15 (BR -> SEMICOLON ESTATUTO BR .)
 
 
+state 66
+
+    (45) L -> LPAREN D . RPAREN
+
+    RPAREN          shift and go to state 83
+
+
 state 67
 
-    (46) L -> LPAREN D . RPAREN
+    (46) D -> L .
+    (47) D -> L . D1
+    (48) D1 -> . OR L
+    (49) D1 -> . AND L
+    (50) D1 -> .
 
-    RPAREN          shift and go to state 84
+  ! reduce/reduce conflict for RPAREN resolved using rule 46 (D -> L .)
+    RPAREN          reduce using rule 46 (D -> L .)
+    OR              shift and go to state 85
+    AND             shift and go to state 86
 
+  ! RPAREN          [ reduce using rule 50 (D1 -> .) ]
+
+    D1                             shift and go to state 84
 
 state 68
 
-    (47) D -> L .
-    (48) D -> L . D1
-    (49) D1 -> . OR L
-    (50) D1 -> . AND L
-    (51) D1 -> .
+    (18) ESTATUTO -> IF LPAREN L RPAREN . THEN ESTATUTO IF1
 
-  ! reduce/reduce conflict for RPAREN resolved using rule 47 (D -> L .)
-    RPAREN          reduce using rule 47 (D -> L .)
-    OR              shift and go to state 86
-    AND             shift and go to state 87
+    THEN            shift and go to state 87
 
-  ! RPAREN          [ reduce using rule 51 (D1 -> .) ]
-
-    D1                             shift and go to state 85
 
 state 69
 
-    (18) ESTATUTO -> IF LPAREN L RPAREN . THEN ESTATUTO IF1
+    (44) L -> ID OPRL . ID
 
-    THEN            shift and go to state 88
+    ID              shift and go to state 88
 
 
 state 70
 
-    (45) L -> ID OPRL . ID
+    (51) OPRL -> GT .
 
-    ID              shift and go to state 89
+    ID              reduce using rule 51 (OPRL -> GT .)
 
 
 state 71
 
-    (52) OPRL -> GT .
+    (52) OPRL -> LT .
 
-    ID              reduce using rule 52 (OPRL -> GT .)
+    ID              reduce using rule 52 (OPRL -> LT .)
 
 
 state 72
 
-    (53) OPRL -> LT .
+    (53) OPRL -> ET .
 
-    ID              reduce using rule 53 (OPRL -> LT .)
+    ID              reduce using rule 53 (OPRL -> ET .)
 
 
 state 73
-
-    (54) OPRL -> ET .
-
-    ID              reduce using rule 54 (OPRL -> ET .)
-
-
-state 74
 
     (19) ESTATUTO -> WHILE LPAREN L RPAREN . ESTATUTO END
     (17) ESTATUTO -> . vars
@@ -1124,31 +1101,29 @@ state 74
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     END             reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! END             [ reduce using rule 23 (ESTATUTO -> .) ]
   ! END             [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 90
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 89
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 75
+state 74
 
     (20) ESTATUTO -> DWHILE ESTATUTO DW1 UNTIL . ESTATUTO END
     (17) ESTATUTO -> . vars
@@ -1166,60 +1141,58 @@ state 75
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     END             reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! END             [ reduce using rule 23 (ESTATUTO -> .) ]
   ! END             [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 91
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 90
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 76
+state 75
 
     (26) DW1 -> SEMICOLON ESTATUTO . DW1
     (26) DW1 -> . SEMICOLON ESTATUTO DW1
     (27) DW1 -> .
 
-    SEMICOLON       shift and go to state 56
+    SEMICOLON       shift and go to state 55
     UNTIL           reduce using rule 27 (DW1 -> .)
 
-    DW1                            shift and go to state 92
+    DW1                            shift and go to state 91
+
+state 76
+
+    (21) ESTATUTO -> FOR LPAREN vars PIPE . L PIPE vars RPAREN ESTATUTO END
+    (44) L -> . ID OPRL ID
+    (45) L -> . LPAREN D RPAREN
+
+    ID              shift and go to state 52
+    LPAREN          shift and go to state 50
+
+    L                              shift and go to state 92
 
 state 77
 
-    (21) ESTATUTO -> FOR LPAREN vars PIPE . L PIPE vars RPAREN ESTATUTO END
-    (45) L -> . ID OPRL ID
-    (46) L -> . LPAREN D RPAREN
-
-    ID              shift and go to state 53
-    LPAREN          shift and go to state 51
-
-    L                              shift and go to state 93
-
-state 78
-
     (11) MODULO -> FUNCTION ID LPAREN RPAREN vars BLOQUE . END MODULO
 
-    END             shift and go to state 94
+    END             shift and go to state 93
 
 
-state 79
+state 78
 
     (10) vars1 -> F COMA ID EQUAL . vars1
     (9) vars1 -> . F
@@ -1230,30 +1203,30 @@ state 79
     (40) IDCTE -> . CTE_INT
     (41) IDCTE -> . CTE_FL
 
-    LPAREN          shift and go to state 34
-    ID              shift and go to state 30
-    CTE_INT         shift and go to state 35
-    CTE_FL          shift and go to state 36
+    LPAREN          shift and go to state 33
+    ID              shift and go to state 29
+    CTE_INT         shift and go to state 34
+    CTE_FL          shift and go to state 35
 
-    F                              shift and go to state 32
-    vars1                          shift and go to state 95
-    IDCTE                          shift and go to state 33
+    F                              shift and go to state 31
+    vars1                          shift and go to state 94
+    IDCTE                          shift and go to state 32
 
-state 80
+state 79
 
     (34) E -> T PLUS E .
 
     RPAREN          reduce using rule 34 (E -> T PLUS E .)
 
 
-state 81
+state 80
 
     (35) E -> T MINUS E .
 
     RPAREN          reduce using rule 35 (E -> T MINUS E .)
 
 
-state 82
+state 81
 
     (37) T -> F TIMES T .
 
@@ -1262,7 +1235,7 @@ state 82
     RPAREN          reduce using rule 37 (T -> F TIMES T .)
 
 
-state 83
+state 82
 
     (38) T -> F DIVIDE T .
 
@@ -1271,46 +1244,46 @@ state 83
     RPAREN          reduce using rule 38 (T -> F DIVIDE T .)
 
 
+state 83
+
+    (45) L -> LPAREN D RPAREN .
+
+    RPAREN          reduce using rule 45 (L -> LPAREN D RPAREN .)
+    OR              reduce using rule 45 (L -> LPAREN D RPAREN .)
+    AND             reduce using rule 45 (L -> LPAREN D RPAREN .)
+    PIPE            reduce using rule 45 (L -> LPAREN D RPAREN .)
+
+
 state 84
 
-    (46) L -> LPAREN D RPAREN .
+    (47) D -> L D1 .
 
-    RPAREN          reduce using rule 46 (L -> LPAREN D RPAREN .)
-    OR              reduce using rule 46 (L -> LPAREN D RPAREN .)
-    AND             reduce using rule 46 (L -> LPAREN D RPAREN .)
-    PIPE            reduce using rule 46 (L -> LPAREN D RPAREN .)
+    RPAREN          reduce using rule 47 (D -> L D1 .)
 
 
 state 85
 
-    (48) D -> L D1 .
+    (48) D1 -> OR . L
+    (44) L -> . ID OPRL ID
+    (45) L -> . LPAREN D RPAREN
 
-    RPAREN          reduce using rule 48 (D -> L D1 .)
+    ID              shift and go to state 52
+    LPAREN          shift and go to state 50
 
+    L                              shift and go to state 95
 
 state 86
 
-    (49) D1 -> OR . L
-    (45) L -> . ID OPRL ID
-    (46) L -> . LPAREN D RPAREN
+    (49) D1 -> AND . L
+    (44) L -> . ID OPRL ID
+    (45) L -> . LPAREN D RPAREN
 
-    ID              shift and go to state 53
-    LPAREN          shift and go to state 51
+    ID              shift and go to state 52
+    LPAREN          shift and go to state 50
 
     L                              shift and go to state 96
 
 state 87
-
-    (50) D1 -> AND . L
-    (45) L -> . ID OPRL ID
-    (46) L -> . LPAREN D RPAREN
-
-    ID              shift and go to state 53
-    LPAREN          shift and go to state 51
-
-    L                              shift and go to state 97
-
-state 88
 
     (18) ESTATUTO -> IF LPAREN L RPAREN THEN . ESTATUTO IF1
     (17) ESTATUTO -> . vars
@@ -1328,7 +1301,6 @@ state 88
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for ELSE resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
@@ -1338,19 +1310,18 @@ state 88
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for UNTIL resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     ELSE            reduce using rule 6 (vars -> .)
     SEMICOLON       reduce using rule 6 (vars -> .)
     END             reduce using rule 6 (vars -> .)
     UNTIL           reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! ELSE            [ reduce using rule 23 (ESTATUTO -> .) ]
   ! SEMICOLON       [ reduce using rule 23 (ESTATUTO -> .) ]
@@ -1361,100 +1332,100 @@ state 88
   ! END             [ reduce using rule 14 (BLOQUE -> .) ]
   ! UNTIL           [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 98
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 97
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
+state 88
+
+    (44) L -> ID OPRL ID .
+
+    RPAREN          reduce using rule 44 (L -> ID OPRL ID .)
+    OR              reduce using rule 44 (L -> ID OPRL ID .)
+    AND             reduce using rule 44 (L -> ID OPRL ID .)
+    PIPE            reduce using rule 44 (L -> ID OPRL ID .)
+
+
 state 89
 
-    (45) L -> ID OPRL ID .
+    (19) ESTATUTO -> WHILE LPAREN L RPAREN ESTATUTO . END
 
-    RPAREN          reduce using rule 45 (L -> ID OPRL ID .)
-    OR              reduce using rule 45 (L -> ID OPRL ID .)
-    AND             reduce using rule 45 (L -> ID OPRL ID .)
-    PIPE            reduce using rule 45 (L -> ID OPRL ID .)
+    END             shift and go to state 98
 
 
 state 90
 
-    (19) ESTATUTO -> WHILE LPAREN L RPAREN ESTATUTO . END
+    (20) ESTATUTO -> DWHILE ESTATUTO DW1 UNTIL ESTATUTO . END
 
     END             shift and go to state 99
 
 
 state 91
 
-    (20) ESTATUTO -> DWHILE ESTATUTO DW1 UNTIL ESTATUTO . END
-
-    END             shift and go to state 100
-
-
-state 92
-
     (26) DW1 -> SEMICOLON ESTATUTO DW1 .
 
     UNTIL           reduce using rule 26 (DW1 -> SEMICOLON ESTATUTO DW1 .)
 
 
-state 93
+state 92
 
     (21) ESTATUTO -> FOR LPAREN vars PIPE L . PIPE vars RPAREN ESTATUTO END
 
-    PIPE            shift and go to state 101
+    PIPE            shift and go to state 100
 
 
-state 94
+state 93
 
     (11) MODULO -> FUNCTION ID LPAREN RPAREN vars BLOQUE END . MODULO
     (11) MODULO -> . FUNCTION ID LPAREN RPAREN vars BLOQUE END MODULO
     (12) MODULO -> .
 
-    FUNCTION        shift and go to state 13
+    FUNCTION        shift and go to state 12
     BEGIN           reduce using rule 12 (MODULO -> .)
     $end            reduce using rule 12 (MODULO -> .)
 
-    MODULO                         shift and go to state 102
+    MODULO                         shift and go to state 101
 
-state 95
+state 94
 
     (10) vars1 -> F COMA ID EQUAL vars1 .
 
     SEMICOLON       reduce using rule 10 (vars1 -> F COMA ID EQUAL vars1 .)
 
 
+state 95
+
+    (48) D1 -> OR L .
+
+    RPAREN          reduce using rule 48 (D1 -> OR L .)
+
+
 state 96
 
-    (49) D1 -> OR L .
+    (49) D1 -> AND L .
 
-    RPAREN          reduce using rule 49 (D1 -> OR L .)
+    RPAREN          reduce using rule 49 (D1 -> AND L .)
 
 
 state 97
-
-    (50) D1 -> AND L .
-
-    RPAREN          reduce using rule 50 (D1 -> AND L .)
-
-
-state 98
 
     (18) ESTATUTO -> IF LPAREN L RPAREN THEN ESTATUTO . IF1
     (24) IF1 -> . ELSE ESTATUTO
     (25) IF1 -> .
 
   ! shift/reduce conflict for ELSE resolved as shift
-    ELSE            shift and go to state 104
+    ELSE            shift and go to state 103
     SEMICOLON       reduce using rule 25 (IF1 -> .)
     END             reduce using rule 25 (IF1 -> .)
     UNTIL           reduce using rule 25 (IF1 -> .)
 
   ! ELSE            [ reduce using rule 25 (IF1 -> .) ]
 
-    IF1                            shift and go to state 103
+    IF1                            shift and go to state 102
 
-state 99
+state 98
 
     (19) ESTATUTO -> WHILE LPAREN L RPAREN ESTATUTO END .
 
@@ -1464,7 +1435,7 @@ state 99
     ELSE            reduce using rule 19 (ESTATUTO -> WHILE LPAREN L RPAREN ESTATUTO END .)
 
 
-state 100
+state 99
 
     (20) ESTATUTO -> DWHILE ESTATUTO DW1 UNTIL ESTATUTO END .
 
@@ -1474,7 +1445,7 @@ state 100
     ELSE            reduce using rule 20 (ESTATUTO -> DWHILE ESTATUTO DW1 UNTIL ESTATUTO END .)
 
 
-state 101
+state 100
 
     (21) ESTATUTO -> FOR LPAREN vars PIPE L PIPE . vars RPAREN ESTATUTO END
     (5) vars -> . dec1 ID EQUAL vars1 SEMICOLON vars
@@ -1483,19 +1454,17 @@ state 101
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
     RPAREN          reduce using rule 6 (vars -> .)
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
-    vars                           shift and go to state 105
+    vars                           shift and go to state 104
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 102
+state 101
 
     (11) MODULO -> FUNCTION ID LPAREN RPAREN vars BLOQUE END MODULO .
 
@@ -1503,7 +1472,7 @@ state 102
     $end            reduce using rule 11 (MODULO -> FUNCTION ID LPAREN RPAREN vars BLOQUE END MODULO .)
 
 
-state 103
+state 102
 
     (18) ESTATUTO -> IF LPAREN L RPAREN THEN ESTATUTO IF1 .
 
@@ -1513,7 +1482,7 @@ state 103
     ELSE            reduce using rule 18 (ESTATUTO -> IF LPAREN L RPAREN THEN ESTATUTO IF1 .)
 
 
-state 104
+state 103
 
     (24) IF1 -> ELSE . ESTATUTO
     (17) ESTATUTO -> . vars
@@ -1531,7 +1500,6 @@ state 104
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for ELSE resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
@@ -1541,19 +1509,18 @@ state 104
   ! reduce/reduce conflict for SEMICOLON resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for UNTIL resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     ELSE            reduce using rule 6 (vars -> .)
     SEMICOLON       reduce using rule 6 (vars -> .)
     END             reduce using rule 6 (vars -> .)
     UNTIL           reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! ELSE            [ reduce using rule 23 (ESTATUTO -> .) ]
   ! SEMICOLON       [ reduce using rule 23 (ESTATUTO -> .) ]
@@ -1564,20 +1531,20 @@ state 104
   ! END             [ reduce using rule 14 (BLOQUE -> .) ]
   ! UNTIL           [ reduce using rule 14 (BLOQUE -> .) ]
 
-    ESTATUTO                       shift and go to state 106
-    vars                           shift and go to state 23
-    BLOQUE                         shift and go to state 28
+    ESTATUTO                       shift and go to state 105
+    vars                           shift and go to state 22
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 105
+state 104
 
     (21) ESTATUTO -> FOR LPAREN vars PIPE L PIPE vars . RPAREN ESTATUTO END
 
-    RPAREN          shift and go to state 107
+    RPAREN          shift and go to state 106
 
 
-state 106
+state 105
 
     (24) IF1 -> ELSE ESTATUTO .
 
@@ -1587,7 +1554,7 @@ state 106
     UNTIL           reduce using rule 24 (IF1 -> ELSE ESTATUTO .)
 
 
-state 107
+state 106
 
     (21) ESTATUTO -> FOR LPAREN vars PIPE L PIPE vars RPAREN . ESTATUTO END
     (17) ESTATUTO -> . vars
@@ -1605,38 +1572,36 @@ state 107
     (8) dec1 -> .
     (42) TIPO -> . INT
     (43) TIPO -> . FL
-    (44) TIPO -> . CHAR
 
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
   ! reduce/reduce conflict for END resolved using rule 6 (vars -> .)
-    IF              shift and go to state 24
-    WHILE           shift and go to state 25
-    DWHILE          shift and go to state 26
-    FOR             shift and go to state 27
+    IF              shift and go to state 23
+    WHILE           shift and go to state 24
+    DWHILE          shift and go to state 25
+    FOR             shift and go to state 26
     END             reduce using rule 6 (vars -> .)
-    BEGIN           shift and go to state 18
+    BEGIN           shift and go to state 17
     ID              reduce using rule 8 (dec1 -> .)
     INT             shift and go to state 9
     FL              shift and go to state 10
-    CHAR            shift and go to state 11
 
   ! END             [ reduce using rule 23 (ESTATUTO -> .) ]
   ! END             [ reduce using rule 14 (BLOQUE -> .) ]
 
-    vars                           shift and go to state 23
-    ESTATUTO                       shift and go to state 108
-    BLOQUE                         shift and go to state 28
+    vars                           shift and go to state 22
+    ESTATUTO                       shift and go to state 107
+    BLOQUE                         shift and go to state 27
     dec1                           shift and go to state 7
     TIPO                           shift and go to state 8
 
-state 108
+state 107
 
     (21) ESTATUTO -> FOR LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO . END
 
-    END             shift and go to state 109
+    END             shift and go to state 108
 
 
-state 109
+state 108
 
     (21) ESTATUTO -> FOR LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO END .
 
@@ -1648,48 +1613,48 @@ state 109
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for BEGIN in state 12 resolved as shift
-WARNING: shift/reduce conflict for BEGIN in state 17 resolved as shift
-WARNING: shift/reduce conflict for ELSE in state 98 resolved as shift
-WARNING: reduce/reduce conflict in state 17 resolved using rule (main1 -> BLOQUE)
+WARNING: shift/reduce conflict for BEGIN in state 11 resolved as shift
+WARNING: shift/reduce conflict for BEGIN in state 16 resolved as shift
+WARNING: shift/reduce conflict for ELSE in state 97 resolved as shift
+WARNING: reduce/reduce conflict in state 16 resolved using rule (main1 -> BLOQUE)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 16
+WARNING: reduce/reduce conflict in state 17 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 17
+WARNING: reduce/reduce conflict in state 17 resolved using rule (vars -> <empty>)
 WARNING: rejected rule (BLOQUE -> <empty>) in state 17
-WARNING: reduce/reduce conflict in state 18 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 18
-WARNING: reduce/reduce conflict in state 18 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 18
-WARNING: reduce/reduce conflict in state 26 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 26
-WARNING: reduce/reduce conflict in state 26 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 26
-WARNING: reduce/reduce conflict in state 38 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 38
-WARNING: reduce/reduce conflict in state 38 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 38
-WARNING: reduce/reduce conflict in state 56 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 56
-WARNING: reduce/reduce conflict in state 56 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 56
-WARNING: reduce/reduce conflict in state 68 resolved using rule (D -> L)
-WARNING: rejected rule (D1 -> <empty>) in state 68
+WARNING: reduce/reduce conflict in state 25 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 25
+WARNING: reduce/reduce conflict in state 25 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 25
+WARNING: reduce/reduce conflict in state 37 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 37
+WARNING: reduce/reduce conflict in state 37 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 37
+WARNING: reduce/reduce conflict in state 55 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 55
+WARNING: reduce/reduce conflict in state 55 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 55
+WARNING: reduce/reduce conflict in state 67 resolved using rule (D -> L)
+WARNING: rejected rule (D1 -> <empty>) in state 67
+WARNING: reduce/reduce conflict in state 73 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 73
+WARNING: reduce/reduce conflict in state 73 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 73
 WARNING: reduce/reduce conflict in state 74 resolved using rule (vars -> <empty>)
 WARNING: rejected rule (ESTATUTO -> <empty>) in state 74
 WARNING: reduce/reduce conflict in state 74 resolved using rule (vars -> <empty>)
 WARNING: rejected rule (BLOQUE -> <empty>) in state 74
-WARNING: reduce/reduce conflict in state 75 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 75
-WARNING: reduce/reduce conflict in state 75 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 75
-WARNING: reduce/reduce conflict in state 88 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 88
-WARNING: reduce/reduce conflict in state 88 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 88
-WARNING: reduce/reduce conflict in state 104 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 104
-WARNING: reduce/reduce conflict in state 104 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 104
-WARNING: reduce/reduce conflict in state 107 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (ESTATUTO -> <empty>) in state 107
-WARNING: reduce/reduce conflict in state 107 resolved using rule (vars -> <empty>)
-WARNING: rejected rule (BLOQUE -> <empty>) in state 107
+WARNING: reduce/reduce conflict in state 87 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 87
+WARNING: reduce/reduce conflict in state 87 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 87
+WARNING: reduce/reduce conflict in state 103 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 103
+WARNING: reduce/reduce conflict in state 103 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 103
+WARNING: reduce/reduce conflict in state 106 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (ESTATUTO -> <empty>) in state 106
+WARNING: reduce/reduce conflict in state 106 resolved using rule (vars -> <empty>)
+WARNING: rejected rule (BLOQUE -> <empty>) in state 106
 WARNING: Rule (ESTATUTO -> <empty>) is never reduced
 WARNING: Rule (D1 -> <empty>) is never reduced

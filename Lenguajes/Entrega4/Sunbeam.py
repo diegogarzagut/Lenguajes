@@ -37,8 +37,8 @@ tokens = [
 	'GT',
 	'LT',
 	'ET',
-	'CTE_INT',
 	'CTE_FL',
+	'CTE_INT',
 	'CHAR',
 	'COMA'
 
@@ -128,14 +128,17 @@ def t_ID(t):
     t.type = reserved.get(t.value,'ID')
     print(t.type)
     return t
+
+def t_CTE_FL(t):
+	r'\d+\.\d+'  
+	t.value = float(t.value)
+	print(t.type)
+	return t
+
 def t_CTE_INT(t):
 	r'\d+'
 	t.value = int(t.value)
 	print(t.type)
-	return t
-def t_CTE_FL(t):
-	r'\d+\.\d+'  
-	t.value = float(t.value)
 	return t
 
 def t_newline(t):
@@ -254,7 +257,6 @@ def p_TIPO(p):
 	'''
 	TIPO : INT
 		 | FL
-		 | CHAR
 	'''
 
 def p_L(p):
