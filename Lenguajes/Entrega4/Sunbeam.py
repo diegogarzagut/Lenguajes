@@ -9,13 +9,14 @@ reserved = {
     'else' : 'ELSE',
     'while' : 'WHILE',
 	'dwhile' : 'DWHILE',
-	'for': 'FOR',
-	'until': 'UNTIL',
-	'function': 'FUNCTION',
-	'int':'INT',
-	'fl': 'FL'
+	'for' : 'FOR',
+	'until' : 'UNTIL',
+	'function' : 'FUNCTION',
+	'int' : 'INT',
+	'fl' : 'FL',
+	'and': 'AND',
+	'or' :'OR'
  }
- # hola
 
 tokens = [
 	'MAIN',
@@ -32,6 +33,10 @@ tokens = [
 	'COLON',
 	'SEMICOLON',
 	'EQUAL',
+	'PIPE',
+	'GT',
+	'LT',
+	'ET',
 	'CTE_INT',
 	'CTE_FL',
 	'CHAR',
@@ -76,6 +81,12 @@ def t_RPAREN(t):
 	print("RPAREN")
 	return t
 
+def t_PIPE(t):
+	r'\|'
+	t.type = 'PIPE'
+	print("PIPE")
+	return t
+
 def t_COLON(t):
 	r'\:'
 	t.type = 'COLON'
@@ -92,6 +103,24 @@ def t_EQUAL(t):
 	r'\='
 	t.type = 'EQUAL'
 	print("EQUAL")
+	return t
+
+def t_GT(t):
+	r'\>'
+	t.type = 'GT'
+	print("GT")
+	return t
+
+def t_LT(t):
+	r'\<'
+	t.type = 'LT'
+	print("LT")
+	return t
+
+def t_ET(t):
+	r'\=='
+	t.type = 'ET'
+	print("ET")
 	return t
 
 def t_ID(t):
@@ -127,9 +156,13 @@ def p_S(p):
 
 def p_main(p):
 	'''
-	main : MAIN LPAREN RPAREN vars MODULO BLOQUE
+	main : MAIN LPAREN RPAREN vars MODULO main1
 	'''
-
+def p_main1(p):
+	'''
+	main1 : BLOQUE
+	      | BLOQUE main1
+	'''
 def p_vars(p):
 	'''
 	vars  : dec1 ID EQUAL vars1 SEMICOLON vars
@@ -144,7 +177,7 @@ def p_dec1(p):
 def p_vars1(p):	
 	'''
 	vars1 : F
-		  | COMA ID EQUAL vars1
+		  | F COMA ID EQUAL vars1
 	'''
 	
 def p_MODULO(p):
@@ -166,16 +199,17 @@ def p_BR(p):
 
 def p_ESTATUTO(p):
 	'''
-	ESTATUTO : IF LPAREN F RPAREN THEN ESTATUTO IF1
-			 | WHILE LPAREN F RPAREN ESTATUTO END
+	ESTATUTO : vars
+	         | IF LPAREN L RPAREN THEN ESTATUTO IF1
+			 | WHILE LPAREN L RPAREN ESTATUTO END
 			 | DWHILE ESTATUTO DW1 UNTIL ESTATUTO END
-			 | FOR LPAREN vars COMA F COMA vars RPAREN ESTATUTO END
+			 | FOR LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO END
 		 	 | BLOQUE
 			 | 
 	'''
 def p_IF1(p):
 	'''
-	IF1 : ELSE ESTATUTO IF1
+	IF1 : ELSE ESTATUTO
 		| 
 	'''
 def p_DW1(p):
@@ -223,13 +257,33 @@ def p_TIPO(p):
 		 | CHAR
 	'''
 
-def p_error(p):
-	#print("\tINCORRECTO")
-	print(f"Syntax error at {p.value!r}")
+def p_L(p):
+	'''
+	L : ID OPRL ID
+	  | LPAREN D RPAREN
+	'''
 
-#def p_empty(p):
-#	'empty:'
-#	pass 
+def p_D(p):
+	'''
+	D : L
+	  | L D1
+	'''
+def p_D1(p):
+	'''
+	D1 : OR L
+	   | AND L
+	   | 
+	'''
+
+def p_OPRL(p):
+	'''
+	OPRL : GT
+		 | LT
+		 | ET
+	'''
+
+def p_error(p):
+	print(f"Syntax error at {p.value!r}")
 
 parser = yacc.yacc()
 
