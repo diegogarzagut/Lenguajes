@@ -1,0 +1,99 @@
+main() # ***** DUDA -> los modulos son como funciones? porque no pueden llevar parametros?DM
+    # Menu
+    op("Welcome")
+    op("Menu")
+    op("    1. Matrix Multiplication")
+    op("    2. Matrix Addition")
+    ip("Select an option by typing the 1 or 2:",choice)
+
+    # Input Values
+    ip("Enter Matrix A 1st dimension size", dimA1)
+    while (dimA1 > 5) # las expresiones logicas pueden ser mas de 1 comparacion?
+        ip("Enter Matrix A 1st dimension size", dimA1)
+    end
+
+    ip("Enter Matrix A 2nd dimension size", dimA2)
+    while (dimA2 > 5)
+        ip("Enter Matrix A 2nd dimension size", dimA2)
+    end
+
+    ip("Enter Matrix B 1st dimension size", dimB1)
+    while (dimB1 > 5)
+        ip("Enter Matrix B 1st dimension size", dimA1)
+    end
+
+    ip("Enter Matrix B 2nd dimension size", dimB2)
+    while (dimB2 > 5)
+        ip("Enter Matrix B 2nd dimension size", dimB2)
+    end
+
+    # Matrix variable declaration **** DUDA, se vale declararla así?
+    matA[dimA1][dimA2]
+	matB[dimB1][dimB2]
+
+    # Multiplication Validation **** DUDA -> el if se escribe true y false?
+    if (dimA2 == dimB1) 
+        op("Valid Matrix Multiplication")
+    end
+    if (dimA2 != dimB1)
+        op("Invalid Matrix Multiplication")
+    end
+
+    # Sum Validation ****** DUDA -> se vale usar ANDs? o los separo?
+
+    if (dimA1 == dimB1 && dimA2 == dimB2)
+        op("Valid Matrix Multiplication")
+    end
+    if (dimA1 != dimB1 && dimA2 == dimB2)
+        op("Valid Matrix Multiplication")
+    end
+
+    # Fill Matrix A 
+    op("Fill Matrix A values: ")
+    while (iA < dimA1)
+        while (jA < dimA2)
+            ip(valueA)
+            matA[i][j]=valueA
+            jA=jA+1
+        end
+        iA=iA+1
+    end
+    # Fill Matrix B
+    op("Fill Matrix B values: ")
+    while (iB < dimB1)
+        while (jB < dimB2)
+            ip(valueB)
+            matB[i][j]=valueB
+            jB=jB+1
+        end
+        iB=iB+1
+    end
+
+    # Menu Action
+
+    if (choice == 1)
+        # validation
+        iM1=0
+        iM2=0
+        iM3=0
+        if (dimA2 == dimB1) 
+            op("Valid Matrix Multiplication")
+            matC[dimA1][dimB2]
+            while (iM1 < (dimA1 - 1))
+                while (iM2 < (dimB2 - 1))
+                    while (iM3 < dimB1)
+                        matC[iM1][iM2]= matC[iM1][iM2] + (matA[iM1][iM3] * matB
+                    end
+                end
+            end
+        end
+        if (dimA2 != dimB1)
+            op("Invalid Matrix Multiplication")
+        end
+    end
+
+    if (choice == 2)
+        # do sum
+    end
+
+end 

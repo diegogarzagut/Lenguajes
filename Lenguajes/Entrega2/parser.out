@@ -1,0 +1,23 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> S
+Rule 1     S -> X QUE TAL
+Rule 2     X -> HOLA Y
+Rule 3     Y -> COMA HOLA Y
+
+Terminals, with rules where they appear
+
+COMA                 : 3
+HOLA                 : 2 3
+QUE                  : 1
+TAL                  : 1
+error                : 
+
+Nonterminals, with rules where they appear
+
+S                    : 0
+X                    : 1
+Y                    : 2 3
+
