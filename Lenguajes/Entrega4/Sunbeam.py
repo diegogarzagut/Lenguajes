@@ -2,6 +2,10 @@
 import ply.lex as lex
 import ply.yacc as yacc
 import sys
+import symboltable
+
+global st
+st = symboltable.SymbolTable()
 
 reserved = {
     'if' : 'IF',
@@ -17,7 +21,6 @@ reserved = {
 	'and': 'AND',
 	'or' :'OR'
  }
-
 tokens = [
 	'MAIN',
 	'BEGIN',
@@ -41,7 +44,6 @@ tokens = [
 	'CTE_INT',
 	'CHAR',
 	'COMA'
-
 ] + list(reserved.values())
 
 t_ignore  = r' '
@@ -57,70 +59,70 @@ t_COMA    = r'\,'
 def t_MAIN(t):
 	r'main'
 	t.type = 'MAIN'
-	print(t.type)
+	#print(t.type)
 	return t
 def t_BEGIN(t):
 	r'begin'
 	t.type = 'BEGIN'
-	print("BEGIN")
+	#print("BEGIN")
 	return t
 def t_END(t):
 	r'end'
 	t.type = 'END'
-	print("END")
+	#print("END")
 	return t
 def t_LPAREN(t):
 	r'\('
 	t.type = 'LPAREN'
-	print("LPAREN")
+	#print("LPAREN")
 	return t
 
 def t_RPAREN(t):
 	r'\)'
 	t.type = 'RPAREN'
-	print("RPAREN")
+	#print("RPAREN")
 	return t
 
 def t_PIPE(t):
 	r'\|'
 	t.type = 'PIPE'
-	print("PIPE")
+	#print("PIPE")
 	return t
 
 def t_COLON(t):
 	r'\:'
 	t.type = 'COLON'
-	print("COLON")
+	#print("COLON")
 	return t
 
 def t_SEMICOLON(t):
 	r'\;'
 	t.type = 'SEMICOLON'
-	print("SEMICOLON")
+	#print("SEMICOLON")
 	return t
 
 def t_EQUAL(t):
 	r'\='
 	t.type = 'EQUAL'
-	print("EQUAL")
+	#print("EQUAL")
 	return t
 
 def t_GT(t):
 	r'\>'
 	t.type = 'GT'
-	print("GT")
+	#print("GT")
 	return t
 
 def t_LT(t):
 	r'\<'
 	t.type = 'LT'
-	print("LT")
+	#print("LT")
 	return t
 
 def t_ET(t):
 	r'\=='
 	t.type = 'ET'
-	print("ET")
+	#print("ET")
 	return t
 
 def t_ID(t):
@@ -155,33 +157,52 @@ def p_S(p):
 	'''
 	S : main
 	'''
-	print("\tCORRECTO")
+	print("--- Tabla de simbolos ---")
+	print(f'Var\tTipo')
+	st.listSTable()
+	print("\t\t\t\t Sintaxis Correcto")
 
 def p_main(p):
 	'''
 	main : MAIN LPAREN RPAREN vars MODULO main1
 	'''
+	
 def p_main1(p):
 	'''
 	main1 : BLOQUE
 	      | BLOQUE main1
 	'''
+	
 def p_vars(p):
 	'''
-	vars  : dec1 ID EQUAL vars1 SEMICOLON vars
-	      | 
+	vars  : dec1 vars0 vars
+	      |
 	'''
+
+def p_vars0(p):
+	'''
+	vars0  : ID EQUAL F SEMICOLON
+	       |
+	'''
+	global auxID
+	auxID = p[1]
+	#print(f'AuxID: {auxID}')
+	global sym
+	sym=symboltable.Symbol(auxID,auxT)
+	st.put(sym)
+	
+
 def p_dec1(p):
 	'''
 	dec1  : TIPO COLON 
 	      | 
 	'''
 
-def p_vars1(p):	
-	'''
-	vars1 : F
-		  | F COMA ID EQUAL vars1
-	'''
+#def p_vars1(p):	
+#	'''
+#	vars1 : F
+#		  | F COMA ID vars1
+#	'''
 	
 def p_MODULO(p):
 	'''
@@ -258,6 +279,9 @@ def p_TIPO(p):
 	TIPO : INT
 		 | FL
 	'''
+	global auxT
+	auxT = p[1]
+	#print(f'AuxT: {auxT}')
 
 def p_L(p):
 	'''
@@ -289,6 +313,7 @@ def p_error(p):
 
 parser = yacc.yacc()
 
+
 while True:
 	try:
 		s = input('sunbeam > ')
@@ -296,3 +321,4 @@ while True:
 
 		break
 	parser.parse(s)
+
