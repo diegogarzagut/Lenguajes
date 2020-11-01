@@ -269,11 +269,9 @@ def p_IDCTE(p):
 	global st
 	global contadortmp
 	tmp2=[]
-	if (len(p)==2 and contadortmp>0):
+	if (contadortmp>0):
 		p[0]=p[1]
-		tmp1=p[1]                                                 #st.getLastKey()
-		pOps.append(str(tmp1))
-		print(pOps)
+		#print(f'IDCTE: {p[0]}')
 
 def p_F(p):
 	'''
@@ -281,60 +279,72 @@ def p_F(p):
 	  | LPAREN E RPAREN
 	'''
 	if (len(p)==2):
-		p[0]==p[1]
+		p[0]=p[1]
+		#print(f'F: {p[0]}')
 
 def p_E(p):
 	'''
 	E : T
-	  | T PLUS E
-	  | T MINUS E
+	  | E PLUS T
+	  | E MINUS T
 	'''
 	global pOps
 	global st
 	global avTmps
 	global avTmpsCount
 	if (len(p)==2):
-		p[0]==p[1]
-	if (len(p)==4):
+		p[0]=p[1]
+		#print(f'E: {p[0]}')
+	elif (len(p)==4):
+		p[0]=p[1]
+		#print(f'E: {p[0]}')
 		if len(pOps)>1:
-			op2=pOps.pop()
-			op1=pOps.pop()
+			op1=pOps.pop(0)
+			op2=pOps.pop(0)
 			if (p[2]=="+"):
-				print(f'+ {op1} {op2} T{avTmpsCount}')
-				avTmps.append(1) # en vez de 1, va el resultado
-				pOps.append("T") #insert(0,avTmps[-1]) 
+				print(f'+ {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			elif (p[2]=="-"):
-				print(f'- {op1} {op2} T{avTmpsCount}')
-				avTmps.append("T") # aqui va el resultado
-				pOps.append(avTmps[-1]) # insert(0,avTmps[-1])  
+				print(f'- {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			avTmpsCount=avTmpsCount+1
 			
 def p_T(p):
 	'''
-	T : F 
-	  | F TIMES T
-	  | F DIVIDE T
+	T : F
+	  | T TIMES F
+	  | T DIVIDE F
 	'''
 	global pOps
 	global st
-	global avTmps
+	global avTmps 
 	global avTmpsCount
-	if (len(p)==4):
-		op1=pOps.pop(0)
-		op2=pOps.pop(0)
-		if (p[2]=="*"):
-			print(f'+ {op1} {op2} T{avTmpsCount}')
-			avTmps.append(1) # en vez de 1, va el resultado
-			pOps.insert(0,avTmps[-1])
+	if (len(p)==2):
+		p[0]=p[1] 
+		#print(f'T: {p[1]}')                                           #st.getLastKey()
+		if p[0]!=None:
+			pOps.insert(0,str(p[0]))
 			print(pOps)
-		elif (p[2]=="/"):
-			print(f'/ {op1} {op2} T{avTmpsCount}')
-			avTmps.append(1) # aqui va el resultado
-			pOps.insert(0,avTmps[-1])
-			print(pOps)
-		avTmpsCount=avTmpsCount+1
+	elif (len(p)==4):
+		p[0]=p[1]
+		if len(pOps)>1:
+			op1=pOps.pop(0)
+			op2=pOps.pop(0)
+			if (p[2]=="*"):
+				print(f'* {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			elif (p[2]=="/"):
+				print(f'/ {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			avTmpsCount=avTmpsCount+1
 
 
 def p_TIPO(p):
