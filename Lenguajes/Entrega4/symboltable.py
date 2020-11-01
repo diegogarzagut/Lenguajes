@@ -8,10 +8,19 @@ class SymbolTable(object):
         else:
             self.symbols[symbol.nombre]= symbol.tipo
             return True
-    
+        
     def listSTable(self):
         for x,y in self.symbols.items():
             print(f'{x} \t {y}')
+    
+    def getLastKey(self):
+        keys=[]
+        if (bool(self.symbols)):
+            for x in self.symbols.keys():
+                keys.append(str(x))
+            tmp1=keys[-1]
+            return tmp1
+
 
 class Symbol:
     def __init__(self,nombre,tipo):

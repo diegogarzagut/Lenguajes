@@ -1,6 +1,0 @@
-main() int: a=(5+6); begin end
-main() int: a=(5),b=(4); function a() a=b; begin a=1; end end 
-main() int: a=(5),b=(4); function a() a=b; begin if (a<b) then a=12; end end 
-main() int: a=(5),b=(4); function a() a=b; begin while (a>b) a=4; end end end 
-main() int: a=(5),b=(4); function a() a=b; begin dwhile a=4; until a=4; end end end 
-main() int: a=(5),b=(4); fl: c=23.4; function a() a=b; begin for (a=4;|a>b|a=(a+3);) a=5; end end end 

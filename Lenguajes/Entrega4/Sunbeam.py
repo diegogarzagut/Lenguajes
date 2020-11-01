@@ -6,6 +6,17 @@ import symboltable
 
 global st
 st = symboltable.SymbolTable()
+global auxT
+global auxID
+global pOps
+pOps=[]
+global avTmps
+avTmps=[]
+global avTmpsCount
+avTmpsCount=0
+global contadortmp
+contadortmp=0
+
 
 reserved = {
     'if' : 'IF',
@@ -65,6 +76,8 @@ def t_BEGIN(t):
 	r'begin'
 	t.type = 'BEGIN'
 	#print("BEGIN")
+	global contadortmp
+	contadortmp=contadortmp+1
 	return t
 def t_END(t):
 	r'end'
@@ -128,19 +141,19 @@ def t_ET(t):
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value,'ID')
-    print(t.type)
+    #print(t.type)
     return t
 
 def t_CTE_FL(t):
 	r'\d+\.\d+'  
 	t.value = float(t.value)
-	print(t.type)
+	#print(t.type)
 	return t
 
 def t_CTE_INT(t):
 	r'\d+'
 	t.value = int(t.value)
-	print(t.type)
+	#print(t.type)
 	return t
 
 def t_newline(t):
@@ -161,6 +174,8 @@ def p_S(p):
 	print(f'Var\tTipo')
 	st.listSTable()
 	print("\t\t\t\t Sintaxis Correcto")
+	print(st.symbols)
+	print(pOps)
 
 def p_main(p):
 	'''
@@ -186,23 +201,15 @@ def p_vars0(p):
 	'''
 	global auxID
 	auxID = p[1]
-	#print(f'AuxID: {auxID}')
 	global sym
 	sym=symboltable.Symbol(auxID,auxT)
 	st.put(sym)
-	
 
 def p_dec1(p):
 	'''
 	dec1  : TIPO COLON 
 	      | 
 	'''
-
-#def p_vars1(p):	
-#	'''
-#	vars1 : F
-#		  | F COMA ID vars1
-#	'''
 	
 def p_MODULO(p):
 	'''
@@ -220,7 +227,6 @@ def p_BR(p):
 	BR :     SEMICOLON ESTATUTO BR
 	        | 
 	'''
-
 def p_ESTATUTO(p):
 	'''
 	ESTATUTO : vars
@@ -248,6 +254,21 @@ def p_X(p):
 	  | END
 	'''
 
+def p_IDCTE(p):
+	'''
+	IDCTE : ID
+		  | CTE_INT
+		  | CTE_FL
+	'''
+	global pOps
+	global st
+	global contadortmp
+	tmp2=[]
+	if (len(p)==2 and contadortmp>0):
+		tmp1=p[1]                                                 #st.getLastKey()
+		pOps.append(str(tmp1))
+		print(pOps)
+
 def p_F(p):
 	'''
 	F : IDCTE
@@ -260,19 +281,55 @@ def p_E(p):
 	  | T PLUS E
 	  | T MINUS E
 	'''
+	global pOps
+	global st
+	global avTmps
+	global avTmpsCount
+	if len(p)==2:
+		p[0]=p[1]
+	elif (len(p)==4):
+		op1=pOps.pop(0)
+		op2=pOps.pop(0)
+		if (p[2]=="+"):
+			print(f'+ {op1} {op2} T{avTmpsCount}')
+			avTmps.append(1) # en vez de 1, va el resultado
+			pOps.insert(0,avTmps[-1])
+			print(pOps)
+		elif (p[2]=="-"):
+			print(f'- {op1} {op2} T{avTmpsCount}')
+			avTmps.append(1) # aqui va el resultado
+			pOps.insert(0,avTmps[-1])
+			print(pOps)
+		avTmpsCount=avTmpsCount+1
+
+
 def p_T(p):
 	'''
 	T : F 
 	  | F TIMES T
 	  | F DIVIDE T
 	'''
+	global pOps
+	global st
+	global avTmps
+	global avTmpsCount
+	if len(p)==2:
+		p[0]=p[1]
+	elif (len(p)==4):
+		op1=pOps.pop(0)
+		op2=pOps.pop(0)
+		if (p[2]=="*"):
+			print(f'+ {op1} {op2} T{avTmpsCount}')
+			avTmps.append(1) # en vez de 1, va el resultado
+			pOps.insert(0,avTmps[-1])
+			print(pOps)
+		elif (p[2]=="/"):
+			print(f'/ {op1} {op2} T{avTmpsCount}')
+			avTmps.append(1) # aqui va el resultado
+			pOps.insert(0,avTmps[-1])
+			print(pOps)
+		avTmpsCount=avTmpsCount+1
 
-def p_IDCTE(p):
-	'''
-	IDCTE : ID
-		  | CTE_INT
-		  | CTE_FL
-	'''
 
 def p_TIPO(p):
 	'''
@@ -281,7 +338,6 @@ def p_TIPO(p):
 	'''
 	global auxT
 	auxT = p[1]
-	#print(f'AuxT: {auxT}')
 
 def p_L(p):
 	'''
