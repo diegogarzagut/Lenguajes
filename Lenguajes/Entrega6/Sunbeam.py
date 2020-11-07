@@ -209,6 +209,18 @@ def p_vars0(p):
 	global sym
 	sym=symboltable.Symbol(auxID,auxT)
 	st.put(sym)
+	global pOps
+	global avTmpsCount
+	global avTmps
+	if (len(p)==5):
+		if len(pOps)==1:
+			op1=pOps.pop(0)
+			if (p[2]=="="):
+				print(f'= {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			avTmpsCount=avTmpsCount+1
 
 def p_dec1(p):
 	'''
