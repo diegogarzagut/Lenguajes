@@ -20,6 +20,7 @@ global countIDCTE
 countIDCTE=0
 global countF
 countF=0
+global opT
 
 
 
@@ -179,8 +180,8 @@ def p_S(p):
 	print(f'Var\tTipo')
 	st.listSTable()
 	print("\t\t\t\t Sintaxis Correcto")
-	print(st.symbols)
-	print(pOps)
+	print(f'Tabla de Simbolos: {st.symbols}')
+	
 
 def p_main(p):
 	'''
@@ -244,10 +245,10 @@ def p_BR(p):
 	BR :     SEMICOLON ESTATUTO BR
 	        | 
 	'''
-def p_ESTATUTO(p):
+def p_ESTATUTO(p): #IF LPAREN L RPAREN THEN ESTATUTO IF1
 	'''
 	ESTATUTO : vars
-	         | IF LPAREN L RPAREN THEN ESTATUTO IF1
+	         | IF L THEN ESTATUTO IF1 
 			 | WHILE LPAREN L RPAREN ESTATUTO END
 			 | DWHILE ESTATUTO DW1 UNTIL ESTATUTO END
 			 | FOR LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO END
@@ -367,30 +368,86 @@ def p_TIPO(p):
 	global auxT
 	auxT = p[1]
 
-def p_L(p):
-	'''
-	L : ID OPRL ID
-	  | LPAREN D RPAREN
-	'''
-
-def p_D(p):
-	'''
-	D : L
-	  | L D1
-	'''
-def p_D1(p):
-	'''
-	D1 : OR L
-	   | AND L
-	   | 
-	'''
-
 def p_OPRL(p):
 	'''
 	OPRL : GT
 		 | LT
 		 | ET
 	'''
+	global pOps
+	global avTmpsCount
+	global avTmps
+	global contadortmp
+	if (contadortmp>0):
+		p[0]=p[1]
+		
+	
+
+def p_L(p):
+	'''
+	L : ID OPRL ID
+	  | LPAREN D RPAREN
+	'''
+	global pOps
+	global avTmpsCount
+	global avTmps
+	global opT
+	if p[1]!="(":
+		opT=p[2]
+		pOps.insert(0,str(p[1]))
+		pOps.insert(0,str(p[3]))
+		print(pOps)
+		if len(pOps)>1:
+			op1=pOps.pop(0)
+			op2=pOps.pop(0)
+			if (p[2]==">"):
+				print(f'> {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			elif (p[2]=="<"):
+				print(f'< {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			elif (p[2]=="=="):
+				print(f'== {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			avTmpsCount=avTmpsCount+1
+
+def p_D(p):
+	'''
+	D : L
+	  | L D1
+	'''
+	
+def p_D1(p):
+	'''
+	D1 : OR L
+	   | AND L
+	   | 
+	'''
+	global pOps
+	global avTmpsCount
+	global avTmps
+	if (len(p)==3):
+		if len(pOps)>1:
+			op1=pOps.pop(0)
+			op2=pOps.pop(0)
+			if (p[1]=="or"):
+				print(f'OR {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			elif (p[1]=="and"):
+				print(f'AND {op2} {op1} T{avTmpsCount}')
+				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
+				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
+				print(pOps)
+			avTmpsCount=avTmpsCount+1
+
 
 def p_error(p):
 	print(f"Syntax error at {p.value!r}")
@@ -402,7 +459,5 @@ while True:
 	try:
 		s = input('sunbeam > ')
 	except EOFError:
-
 		break
 	parser.parse(s)
-
