@@ -21,6 +21,8 @@ countIDCTE=0
 global countF
 countF=0
 global opT
+global cuadruplos
+cuadruplos=[]
 
 
 
@@ -176,11 +178,13 @@ def p_S(p):
 	'''
 	S : main
 	'''
+	print("\t\t\t\t Sintaxis Correcto")
 	print("--- Tabla de simbolos ---")
 	print(f'Var\tTipo')
 	st.listSTable()
-	print("\t\t\t\t Sintaxis Correcto")
-	print(f'Tabla de Simbolos: {st.symbols}')
+	print("Cuadruplos:")
+	for x in cuadruplos:
+		print(x)
 	
 
 def p_main(p):
@@ -218,6 +222,8 @@ def p_vars0(p):
 			op1=pOps.pop(0)
 			if (p[2]=="="):
 				print(f'= {op1} T{avTmpsCount}')
+				cTmp="= "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
@@ -305,6 +311,7 @@ def p_E(p):
 	global st
 	global avTmps
 	global avTmpsCount
+	global cuadruplos
 	if (len(p)==2):
 		p[0]=p[1]
 		#print(f'E: {p[0]}')
@@ -316,11 +323,15 @@ def p_E(p):
 			op2=pOps.pop(0)
 			if (p[2]=="+"):
 				print(f'+ {op2} {op1} T{avTmpsCount}')
+				cTmp="+ "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			elif (p[2]=="-"):
 				print(f'- {op2} {op1} T{avTmpsCount}')
+				cTmp="+ "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
@@ -336,6 +347,7 @@ def p_T(p):
 	global st
 	global avTmps 
 	global avTmpsCount
+	global cuadruplos
 	if (len(p)==2):
 		p[0]=p[1] 
 		#print(f'T: {p[1]}')                                           #st.getLastKey()
@@ -349,11 +361,15 @@ def p_T(p):
 			op2=pOps.pop(0)
 			if (p[2]=="*"):
 				print(f'* {op2} {op1} T{avTmpsCount}')
+				cTmp="* "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			elif (p[2]=="/"):
 				print(f'/ {op2} {op1} T{avTmpsCount}')
+				cTmp="/ "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
@@ -392,6 +408,7 @@ def p_L(p):
 	global avTmpsCount
 	global avTmps
 	global opT
+	global cuadruplos
 	if p[1]!="(":
 		opT=p[2]
 		pOps.insert(0,str(p[1]))
@@ -402,16 +419,22 @@ def p_L(p):
 			op2=pOps.pop(0)
 			if (p[2]==">"):
 				print(f'> {op2} {op1} T{avTmpsCount}')
+				cTmp="> "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			elif (p[2]=="<"):
 				print(f'< {op2} {op1} T{avTmpsCount}')
+				cTmp="< "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			elif (p[2]=="=="):
 				print(f'== {op2} {op1} T{avTmpsCount}')
+				cTmp="== "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
@@ -432,17 +455,22 @@ def p_D1(p):
 	global pOps
 	global avTmpsCount
 	global avTmps
+	global cuadruplos
 	if (len(p)==3):
 		if len(pOps)>1:
 			op1=pOps.pop(0)
 			op2=pOps.pop(0)
 			if (p[1]=="or"):
 				print(f'OR {op2} {op1} T{avTmpsCount}')
+				cTmp="OR "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			elif (p[1]=="and"):
 				print(f'AND {op2} {op1} T{avTmpsCount}')
+				cTmp="AND "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cuadruplos.append(cTmp)
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
