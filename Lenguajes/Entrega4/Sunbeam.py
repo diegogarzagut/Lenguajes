@@ -268,10 +268,9 @@ def p_IDCTE(p):
 	global pOps
 	global st
 	global contadortmp
-	tmp2=[]
-	if (len(p)==2 and contadortmp>0):
+	if (len(p)==2):
 		p[0]=p[1]
-		tmp1=p[1]                                                 #st.getLastKey()
+		tmp1=p[1]                                                 
 		pOps.append(str(tmp1))
 		print(pOps)
 

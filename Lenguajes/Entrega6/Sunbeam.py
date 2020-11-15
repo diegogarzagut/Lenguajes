@@ -53,7 +53,6 @@ tokens = [
 	'BEGIN',
 	'END',
 	'ID',
-	'NUMBER', 
     'PLUS',
     'MINUS',
     'TIMES',
@@ -69,7 +68,6 @@ tokens = [
 	'ET',
 	'CTE_FL',
 	'CTE_INT',
-	'CHAR',
 	'COMA'
 ] + list(reserved.values())
 
@@ -203,18 +201,15 @@ def p_S(p):
 	for x in pilaSaltos:
 		print(x)
 	
-
 def p_main(p):
 	'''
 	main : MAIN LPAREN RPAREN vars MODULO main1
 	'''
-	
 def p_main1(p):
 	'''
 	main1 : BLOQUE
 	      | BLOQUE main1
 	'''
-	
 def p_vars(p):
 	'''
 	vars  : dec1 vars0 vars
@@ -227,32 +222,36 @@ def p_dec1(p):
 	      | 
 	'''
 
+def p_TIPO(p):
+	'''
+	TIPO : INT
+		 | FL
+		 | BOOL
+	'''
+	global auxT
+	auxT = p[1]
+
 def p_vars0(p):
 	'''
 	vars0  : ID EQUAL F SEMICOLON
 	       |
 	'''
+
 	global auxID; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos
 	auxID = p[1]
 	sym=symboltable.Symbol(auxID,auxT)
 	st.put(sym)
 	if (len(p)==5):
-		if len(pOps)>1:
-			op1=pOps.pop(0)
-			if (p[2]=="="):
-				#print(f'= {op1} T{avTmpsCount}')
-				print(f'= {op1} {p[1]}')
-				#cTmp="= "+str(op1)+" T"+str(avTmpsCount)
-				cTmp="= "+str(op1)+" "+str(p[1])
-				cuadruplos.append(cTmp)
-				#avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
-				avTmps.append(str(p[1]))
-				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
-				print(pOps)
-			#avTmpsCount=avTmpsCount+1
-			contCuadruplos=contCuadruplos+1
-		
-	
+		op1=pOps.pop(0)
+		if (p[2]=="="):
+			print(f'= {op1} {p[1]}')
+			cTmp="= "+str(op1)+" "+str(p[1])
+			cuadruplos.append(cTmp)
+			avTmps.append(str(p[1]))
+			pOps.insert(0,avTmps[-1]) 
+			print(pOps)
+		contCuadruplos=contCuadruplos+1
+
 def p_MODULO(p):
 	'''
 	MODULO : FUNCTION ID LPAREN RPAREN vars BLOQUE END MODULO
@@ -264,16 +263,18 @@ def p_BLOQUE(p):
 	BLOQUE : BEGIN ESTATUTO BR END
 		   | 
 	'''
+
 def p_BR(p):
 	'''
 	BR :     SEMICOLON ESTATUTO BR
 	        | 
 	'''
+	
 def p_ESTATUTO(p): 
 	'''
 	ESTATUTO : vars
-	         | IF L THEN GTF ESTATUTO IF1 RGTF RGT
-			 | WHILE GD L GTF ESTATUTO GOTO END RGTF RGT
+	         | IF L THEN THEN1 ESTATUTO IF1 FINIF
+			 | WHILE WHILE1 L WHILE2 ESTATUTO WHILE3 END
 			 | DWHILE ESTATUTO DW1 UNTIL ESTATUTO END
 			 | FOR LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO END
 		 	 | BLOQUE
@@ -281,72 +282,96 @@ def p_ESTATUTO(p):
 	'''
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
 
-def p_GD(p):
+def p_THEN1(p):
 	'''
-	GD : 
+	THEN1 : 
 	'''
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
-	pilaSaltos.insert(0,contCuadruplos)
+	print(f'PDS THEN: {pilaSaltos}')
+	resultado = pOps.pop(0)
+	cTmp="GTF "+str(resultado)
+	cuadruplos.append(cTmp)
+	contCuadruplos=contCuadruplos+1
+	#regresar resultado al avail
+	pilaSaltos.insert(0,contCuadruplos-1)
+	print(f'PDS THEN: {pilaSaltos}')
 
-def p_GTF(p):
+def p_IF1(p):
 	'''
-	GTF : 
+	IF1 : ELSE ELSE1 ESTATUTO
+		| 
 	'''
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
+
+def p_ELSE1(p):
+	'''
+	ELSE1 : 
+	'''
+	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
+	print(f'PDS ELSE: {pilaSaltos}')
+	cTmp="GOTO"
+	cuadruplos.append(cTmp)
+	contCuadruplos=contCuadruplos+1
+	#regresar resultado al avail
+	f=pilaSaltos.pop(0)
+	cuadruplos[f]=cuadruplos[f]+" "+str(contCuadruplos)
+	pilaSaltos.insert(0,contCuadruplos-1)
+	print(f'PDS ELSE: {pilaSaltos}')
+
+def p_FINIF(p):
+	'''
+	FINIF : 
+	'''
+	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
+	print(f'PDS FINIF: {pilaSaltos}')
+	fin=pilaSaltos.pop(0)
+	cuadruplos[fin]=cuadruplos[fin]+" "+str(contCuadruplos)
+	print(f'PDS FINIF: {pilaSaltos}')
+
+def p_WHILE1(p):
+	'''
+	WHILE1 : 
+	'''
+	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
+	print(f'PDS WHILE1: {pilaSaltos}')
+	pilaSaltos.insert(0,contCuadruplos)
+	print(f'PDS WHILE1: {pilaSaltos}')
+
+def p_WHILE2(p):
+	'''
+	WHILE2 : 
+	'''
+	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos
+	print(f'PDS WHILE2: {pilaSaltos}')
 	ANS=pOps.pop(0)
 	cTmp="GTF "+str(ANS)
 	cuadruplos.append(cTmp)
 	contCuadruplos=contCuadruplos+1
 	#regresar resultado al avail
 	pilaSaltos.append(contCuadruplos-1)
-	contIF=contIF+1
+	print(f'PDS WHILE2: {pilaSaltos}')
 
-def p_GOTO(p):
+def p_WHILE3(p):
 	'''
-	GOTO : 
+	WHILE3 : 
 	'''
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
-	cTmp="GOTO "
+	print(f'PDS WHILE3: {pilaSaltos}')
+	dir1= pilaSaltos.pop(0)
+	dir2= pilaSaltos.pop(0)
+	cTmp="GOTO "+str(dir1)
 	cuadruplos.append(cTmp)
 	contCuadruplos=contCuadruplos+1
 	#regresar resultado al avail
-	pilaSaltos.insert(0,contCuadruplos-1)
-	#contIF=contIF+1
+	cuadruplos[dir2]=cuadruplos[dir2]+" "+str(contCuadruplos)
+	print(f'PDS WHILE3: {pilaSaltos}')
 
-def p_RGTF(p):
-	'''
-	RGTF : 
-	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
-	salto=pilaSaltos.pop(0)
-	cuadruplos[salto]=cuadruplos[salto]+" "+str(contCuadruplos)
 
-def p_RGT(p):
-	'''
-	RGT : 
-	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
-	salto=pilaSaltos.pop(0)
-	cuadruplos[salto]=cuadruplos[salto]+" "+str(contCuadruplos) 
-		
-def p_IF1(p):
-	'''
-	IF1 : ELSE GOTO ESTATUTO
-		| 
-	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global contIF
-		
 
 def p_DW1(p):
 	'''
 	DW1 : SEMICOLON ESTATUTO DW1
 	    | 
-	'''
-def p_X(p):
-	'''
-	X : MAIN
-	  | BEGIN
-	  | END
 	'''
 
 def p_IDCTE(p):
@@ -355,12 +380,9 @@ def p_IDCTE(p):
 		  | CTE_INT
 		  | CTE_FL
 	'''
-	global pOps; global st; global contadortmp
-	tmp2=[]
-	#if (contadortmp>0):
+	global pOps; global st
 	p[0]=p[1]
-		#print(f'IDCTE: {p[0]}')
-
+		
 def p_F(p):
 	'''
 	F : IDCTE
@@ -368,7 +390,6 @@ def p_F(p):
 	'''
 	if (len(p)==2):
 		p[0]=p[1]
-		#print(f'F: {p[0]}')
 
 def p_E(p):
 	'''
@@ -379,10 +400,9 @@ def p_E(p):
 	global pOps; global st; global avTmps; global avTmpsCount; global cuadruplos; global contCuadruplos; global pilaSaltos
 	if (len(p)==2):
 		p[0]=p[1]
-		#print(f'E: {p[0]}')
+		#pOps.insert(0,p[1])
 	elif (len(p)==4):
 		p[0]=p[1]
-		#print(f'E: {p[0]}')
 		if len(pOps)>1:
 			op1=pOps.pop(0)
 			op2=pOps.pop(0)
@@ -402,7 +422,7 @@ def p_E(p):
 				print(pOps)
 			avTmpsCount=avTmpsCount+1
 			contCuadruplos=contCuadruplos+1
-			
+
 def p_T(p):
 	'''
 	T : F
@@ -412,10 +432,6 @@ def p_T(p):
 	global pOps; global st; global avTmps; global avTmpsCount; global cuadruplos; global contCuadruplos; global pilaSaltos
 	if (len(p)==2):
 		pOps.insert(0,p[1])
-		#print(f'T: {p[1]}')                                           #st.getLastKey()
-		#if p[0]!=None:
-		#	pOps.insert(0,str(p[0]))
-		#	print(pOps)
 	elif (len(p)==4):
 		p[0]=p[1]
 		if len(pOps)>1:
@@ -440,15 +456,6 @@ def p_T(p):
 			avTmpsCount=avTmpsCount+1
 
 
-def p_TIPO(p):
-	'''
-	TIPO : INT
-		 | FL
-		 | BOOL
-	'''
-	global auxT
-	auxT = p[1]
-
 def p_OPRL(p):
 	'''
 	OPRL : GT
@@ -458,7 +465,6 @@ def p_OPRL(p):
 	global pOps; global avTmpsCount; global avTmps;global contadortmp
 	#if (contadortmp>0):
 	p[0]=p[1]
-	
 
 def p_L(p):
 	'''
@@ -499,17 +505,13 @@ def p_L(p):
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			avTmpsCount=avTmpsCount+1
-			
-			#if contIF>0:
-			#	cTmp="GTF T"+str(avTmpsCount-1)
-			#	cuadruplos.append(cTmp)
 
 def p_D(p):
 	'''
 	D : L
 	  | L D1
 	'''
-	
+
 def p_D1(p):
 	'''
 	D1 : OR L
