@@ -21,6 +21,12 @@ class SymbolTable(object):
             tmp1=keys[-1]
             return tmp1
 
+    def keyExists(self,op1):
+        if self.symbols.__contains__(op1):
+            return True
+        else:
+            return False
+
 
 class Symbol:
     def __init__(self,nombre,tipo):
