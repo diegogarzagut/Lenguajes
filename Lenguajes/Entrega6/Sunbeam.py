@@ -194,7 +194,7 @@ def p_S(p):
 	'''
 	S : main
 	'''
-	global contCuadruplos; global avTmps; global avTmpsCount; global pilaSaltos; global pDirValCont; global PC; global globalMem
+	global cuadruplos; global contCuadruplos; global avTmps; global avTmpsCount; global pilaSaltos; global pDirValCont; global PC; global globalMem
 	print("\t\t\t\t Sintaxis Correcto")
 	print("--- Tabla de simbolos ---")
 	print(f'Var  Valor  Tipo')
@@ -217,45 +217,11 @@ def p_S(p):
 	#print("\n--- Pila de Saltos ---\n")
 	#for x in pilaSaltos:
 	#	print(x)
-	print(f"\nEjecución\n")
-	#convertir strings de cuadruplos a arreglo de arreglos
-	cuadruplosFinal=[]
-	tmp123=0
-	for x in cuadruplos:
-		nwords = len(cuadruplos[tmp123].split())
-		if nwords==1:
-			tmp=[]
-			tmp.append(cuadruplos[tmp123].split()[0])
-			tmp.append(None)
-			tmp.append(None)
-			tmp.append(None)
-			cuadruplosFinal.append(tmp)
-		elif nwords==2:
-			tmp=[]
-			tmp.append(cuadruplos[tmp123].split()[0])
-			tmp.append(cuadruplos[tmp123].split()[1])
-			tmp.append(None)
-			tmp.append(None)
-			cuadruplosFinal.append(tmp)
-		elif nwords==3:
-			tmp=[]
-			tmp.append(cuadruplos[tmp123].split()[0])
-			tmp.append(cuadruplos[tmp123].split()[1])
-			tmp.append(cuadruplos[tmp123].split()[2])
-			tmp.append(None)
-			cuadruplosFinal.append(tmp)
-		elif nwords==4:
-			tmp=[]
-			tmp.append(cuadruplos[tmp123].split()[0])
-			tmp.append(cuadruplos[tmp123].split()[1])
-			tmp.append(cuadruplos[tmp123].split()[2])
-			tmp.append(cuadruplos[tmp123].split()[2])
-			cuadruplosFinal.append(tmp)
-		tmp123=tmp123+1
+	print(f"\nEjecución:\n")
 	PC=0
 	while (PC!=-1):
-		cuadruplo=cuadruplosFinal[PC]
-		opscode=cuadruplosFinal[PC][0]
+		cuadruplo=cuadruplos[PC]
+		opscode=cuadruplos[PC][0]
 		if opscode=="ENDP":
 			print("ENDP")
 			PC=-1
@@ -270,22 +236,27 @@ def p_S(p):
 			PC=PC+1
 		elif opscode=="+":
 			print("+")
-			resultado=None
-			if isinstance(cuadruplo[1],int) and isinstance(cuadruplo[2],int):
-				print("son ints")
-				resultado=cuadruplo[1]+cuadruplo[2]
-			#if globalMem.getSymType(cuadruplo[1])==globalMem.getSymType(cuadruplo[2]) and globalMem.getSymType(cuadruplo[2])=="int":
-			#	cuadruplo[3]=int(cuadruplo[1])+int(cuadruplo[2])
-			print(f'suma= {resultado}')
+			if globalMem.getSymType(cuadruplo[1])==globalMem.getSymType(cuadruplo[2]):
+				cuadruplo[3]=cuadruplo[1]+cuadruplo[2]
+				print(f'{cuadruplo[1]}+{cuadruplo[2]}={cuadruplo[3]}')
 			PC=PC+1
 		elif opscode=='-':
 			print("-")
+			if globalMem.getSymType(cuadruplo[1])==globalMem.getSymType(cuadruplo[2]):
+				cuadruplo[3]=cuadruplo[1]-cuadruplo[2]
+				print(f'{cuadruplo[1]}-{cuadruplo[2]}={cuadruplo[3]}')
 			PC=PC+1
 		elif opscode=='*':
-			print("*")			
+			print("*")
+			if globalMem.getSymType(cuadruplo[1])==globalMem.getSymType(cuadruplo[2]):
+				cuadruplo[3]=cuadruplo[1]*cuadruplo[2]
+				print(f'{cuadruplo[1]}*{cuadruplo[2]}={cuadruplo[3]}')
 			PC=PC+1
 		elif opscode=='/':
 			print("/")
+			if globalMem.getSymType(cuadruplo[1])==globalMem.getSymType(cuadruplo[2]):
+				cuadruplo[3]=cuadruplo[1]/cuadruplo[2]
+				print(f'{cuadruplo[1]}/{cuadruplo[2]}={cuadruplo[3]}')
 			PC=PC+1
 		elif opscode=='AND':
 			print("AND")
@@ -300,10 +271,7 @@ def p_S(p):
 			print("==")
 			PC=PC+1
 		
-	
-	
-			
-	
+
 def p_main(p):
 	'''
 	main : PC MAIN LPAREN RPAREN PC1 vars MODULO main1 PC2
@@ -314,7 +282,12 @@ def p_PC(p):
 	'''
 	global contCuadruplos; global pilaSaltos
 	cTmp="GOTO"
-	cuadruplos.append(cTmp)
+	cTmp1=[]
+	cTmp1.append("GOTO")
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
 	#regresar resultado al avail
 	pilaSaltos.insert(0,contCuadruplos-1)
@@ -325,7 +298,7 @@ def p_PC1(p):
 	'''
 	global PC; global contCuadruplos; global pilaSaltos
 	fin=pilaSaltos.pop(0)
-	cuadruplos[fin]=cuadruplos[fin]+" "+str(contCuadruplos)
+	cuadruplos[fin][1]=contCuadruplos
 	print(f'PDS PC1: {pilaSaltos}')
 	
 def p_PC2(p):
@@ -334,7 +307,12 @@ def p_PC2(p):
 	'''
 	global PC; global cuadruplos; global contCuadruplos
 	cTmp="ENDP"
-	cuadruplos.append(cTmp)
+	cTmp1=[]
+	cTmp1.append("ENDP")
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
 
 def p_main1(p):
@@ -378,7 +356,12 @@ def p_vars0(p):
 		if (p[2]=="="):
 			print(f'= {op1} {p[1]}')
 			cTmp="= "+str(op1)+" "+str(p[1])
-			cuadruplos.append(cTmp)
+			cTmp1=[]
+			cTmp1.append("=")
+			cTmp1.append(op1)
+			cTmp1.append(p[1])
+			cTmp1.append(None)
+			cuadruplos.append(cTmp1)
 			avTmps.append(str(p[1]))
 			pOps.insert(0,avTmps[-1])
 			print(pOps)
@@ -428,8 +411,15 @@ def p_THEN1(p):
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS THEN: {pilaSaltos}')
 	resultado = pOps.pop(0)
+	print(pOps)
 	cTmp="GTF "+str(resultado)
-	cuadruplos.append(cTmp)
+	cTmp1=[]
+	cTmp1.append("GTF")
+	cTmp1.append(resultado)
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cuadruplos.append(cTmp1)
+	print(cuadruplos[-1])
 	contCuadruplos=contCuadruplos+1
 	#regresar resultado al avail
 	pilaSaltos.insert(0,contCuadruplos-1)
@@ -449,11 +439,17 @@ def p_ELSE1(p):
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS ELSE: {pilaSaltos}')
 	cTmp="GOTO"
-	cuadruplos.append(cTmp)
+	cTmp1=[]
+	cTmp1.append("GOTO")
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
 	#regresar resultado al avail
 	f=pilaSaltos.pop(0)
-	cuadruplos[f]=cuadruplos[f]+" "+str(contCuadruplos)
+	#cuadruplos[f]=cuadruplos[f]+" "+str(contCuadruplos)
+	cuadruplos[f][2]=contCuadruplos
 	pilaSaltos.insert(0,contCuadruplos-1)
 	print(f'PDS ELSE: {pilaSaltos}')
 
@@ -464,7 +460,8 @@ def p_FINIF(p):
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS FINIF: {pilaSaltos}')
 	fin=pilaSaltos.pop(0)
-	cuadruplos[fin]=cuadruplos[fin]+" "+str(contCuadruplos)
+	#cuadruplos[fin]=cuadruplos[fin]+" "+str(contCuadruplos)
+	cuadruplos[fin][1]=contCuadruplos
 	print(f'PDS FINIF: {pilaSaltos}')
 
 def p_WHILE1(p):
@@ -484,7 +481,12 @@ def p_WHILE2(p):
 	print(f'PDS WHILE2: {pilaSaltos}')
 	ANS=pOps.pop(0)
 	cTmp="GTF "+str(ANS)
-	cuadruplos.append(cTmp)
+	cTmp1=[]
+	cTmp1.append("GTF")
+	cTmp1.append(ANS)
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
 	#regresar resultado al avail
 	pilaSaltos.append(contCuadruplos-1)
@@ -499,10 +501,15 @@ def p_WHILE3(p):
 	dir1= pilaSaltos.pop(0)
 	dir2= pilaSaltos.pop(0)
 	cTmp="GOTO "+str(dir1)
-	cuadruplos.append(cTmp)
+	cTmp1=[]
+	cTmp1.append("GOTO")
+	cTmp1.append(dir1)
+	cTmp1.append(None)
+	cTmp1.append(None)
+	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
 	#regresar resultado al avail
-	cuadruplos[dir2]=cuadruplos[dir2]+" "+str(contCuadruplos)
+	cuadruplos[dir2][2]=contCuadruplos
 	print(f'PDS WHILE3: {pilaSaltos}')
 
 
@@ -548,14 +555,24 @@ def p_E(p):
 			if (p[2]=="+"):
 				print(f'+ {op2} {op1} T{avTmpsCount}')
 				cTmp="+ "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp1=[]
+				cTmp1.append("+")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
 			elif (p[2]=="-"):
 				print(f'- {op2} {op1} T{avTmpsCount}')
-				cTmp="+ "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp="- "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cTmp1=[]
+				cTmp1.append("-")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(pOps)
@@ -579,7 +596,12 @@ def p_T(p):
 			if (p[2]=="*"):
 				print(f'* {op2} {op1} T{avTmpsCount}')
 				cTmp="* "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp1=[]
+				cTmp1.append("*")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				contCuadruplos=contCuadruplos+1
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
@@ -587,7 +609,12 @@ def p_T(p):
 			elif (p[2]=="/"):
 				print(f'/ {op2} {op1} T{avTmpsCount}')
 				cTmp="/ "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp=[]
+				cTmp1.append("/")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				contCuadruplos=contCuadruplos+1
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
@@ -622,7 +649,12 @@ def p_L(p):
 			if (p[2]==">"):
 				print(f'> {op2} {op1} T{avTmpsCount}')
 				cTmp="> "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp1=[]
+				cTmp1.append(">")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				contCuadruplos=contCuadruplos+1
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
@@ -630,7 +662,12 @@ def p_L(p):
 			elif (p[2]=="<"):
 				print(f'< {op2} {op1} T{avTmpsCount}')
 				cTmp="< "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp1=[]
+				cTmp1.append("<")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				contCuadruplos=contCuadruplos+1
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
@@ -638,7 +675,12 @@ def p_L(p):
 			elif (p[2]=="=="):
 				print(f'== {op2} {op1} T{avTmpsCount}')
 				cTmp="== "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp1=[]
+				cTmp1.append("==")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				contCuadruplos=contCuadruplos+1
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
@@ -665,7 +707,12 @@ def p_D1(p):
 			if (p[1]=="or"):
 				print(f'OR {op2} {op1} T{avTmpsCount}')
 				cTmp="OR "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp1=[]
+				cTmp1.append("OR")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				contCuadruplos=contCuadruplos+1
 				avTmps.append("T"+str(avTmpsCount)) # en vez de 1, va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
@@ -673,7 +720,12 @@ def p_D1(p):
 			elif (p[1]=="and"):
 				print(f'AND {op2} {op1} T{avTmpsCount}')
 				cTmp="AND "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
-				cuadruplos.append(cTmp)
+				cTmp1=[]
+				cTmp1.append("AND")
+				cTmp1.append(op2)
+				cTmp1.append(op1)
+				cTmp1.append("T"+str(avTmpsCount))
+				cuadruplos.append(cTmp1)
 				contCuadruplos=contCuadruplos+1
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 

@@ -31,8 +31,8 @@ class memoryST(object):
                 print(f"Encontré: {i[0]}")
             temp=temp+1
         if countTMP==0:
-            print("no existe variable")
-            return False
+            if isinstance(vari,int):
+                return "int"
         else:
             return self.memory[temp-countTMP][2]
             
