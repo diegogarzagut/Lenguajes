@@ -21,16 +21,33 @@ class memoryST(object):
         else:
             self.memory[temp-countTMP][1]=symbol_m.val
             print (np.array(self.memory))
+    
+    def getSymType(self,vari):
+        countTMP=0
+        temp=0
+        for i in self.memory:
+            if i[0]==vari:
+                countTMP=countTMP+1
+                print(f"Encontré: {i[0]}")
+            temp=temp+1
+        if countTMP==0:
+            print("no existe variable")
+            return False
+        else:
+            return self.memory[temp-countTMP][2]
             
     def listMTable(self):
-        #max_len = len(str(max( max(i) for i in self.memory)))
-        #for i in self.memory:
-        #    print(", ".join([str(l).rjust(max_len) for l in i]))
         print (np.array(self.memory))
+
+    
+
 
 class Symbol_m:
     def __init__(self,var,val,vtype):
         self.var = var
         self.val = val
         self.vtype = vtype
+
+    def getType(self):
+        return self.vtype
     

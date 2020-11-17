@@ -9,6 +9,8 @@ import numpy as np
 
 global st
 st = symboltable.SymbolTable()
+global globalMem
+globalMem = memoryST.memoryST()
 global auxT
 global auxID
 global pOps
@@ -38,8 +40,7 @@ global pDirValCont
 pDirValCont=0
 global PC
 PC=0
-global globalMem
-globalMem = memoryST.memoryST()
+
 
 		
 reserved = {
@@ -193,7 +194,7 @@ def p_S(p):
 	'''
 	S : main
 	'''
-	global memory1; global contCuadruplos; global avTmps; global avTmpsCount; global pilaSaltos; global pDirValCont; global PC
+	global contCuadruplos; global avTmps; global avTmpsCount; global pilaSaltos; global pDirValCont; global PC; global globalMem
 	print("\t\t\t\t Sintaxis Correcto")
 	print("--- Tabla de simbolos ---")
 	print(f'Var  Valor  Tipo')
@@ -216,7 +217,92 @@ def p_S(p):
 	#print("\n--- Pila de Saltos ---\n")
 	#for x in pilaSaltos:
 	#	print(x)
+	print(f"\nEjecución\n")
+	#convertir strings de cuadruplos a arreglo de arreglos
+	cuadruplosFinal=[]
+	tmp123=0
+	for x in cuadruplos:
+		nwords = len(cuadruplos[tmp123].split())
+		if nwords==1:
+			tmp=[]
+			tmp.append(cuadruplos[tmp123].split()[0])
+			tmp.append(None)
+			tmp.append(None)
+			tmp.append(None)
+			cuadruplosFinal.append(tmp)
+		elif nwords==2:
+			tmp=[]
+			tmp.append(cuadruplos[tmp123].split()[0])
+			tmp.append(cuadruplos[tmp123].split()[1])
+			tmp.append(None)
+			tmp.append(None)
+			cuadruplosFinal.append(tmp)
+		elif nwords==3:
+			tmp=[]
+			tmp.append(cuadruplos[tmp123].split()[0])
+			tmp.append(cuadruplos[tmp123].split()[1])
+			tmp.append(cuadruplos[tmp123].split()[2])
+			tmp.append(None)
+			cuadruplosFinal.append(tmp)
+		elif nwords==4:
+			tmp=[]
+			tmp.append(cuadruplos[tmp123].split()[0])
+			tmp.append(cuadruplos[tmp123].split()[1])
+			tmp.append(cuadruplos[tmp123].split()[2])
+			tmp.append(cuadruplos[tmp123].split()[2])
+			cuadruplosFinal.append(tmp)
+		tmp123=tmp123+1
+	PC=0
+	while (PC!=-1):
+		cuadruplo=cuadruplosFinal[PC]
+		opscode=cuadruplosFinal[PC][0]
+		if opscode=="ENDP":
+			print("ENDP")
+			PC=-1
+		elif opscode=="GOTO":
+			print("GOTO")
+			PC=PC+1
+		elif opscode=="GTF":
+			print("GTF")
+			PC=PC+1
+		elif opscode=="=":
+			print("=")
+			PC=PC+1
+		elif opscode=="+":
+			print("+")
+			resultado=None
+			if isinstance(cuadruplo[1],int) and isinstance(cuadruplo[2],int):
+				print("son ints")
+				resultado=cuadruplo[1]+cuadruplo[2]
+			#if globalMem.getSymType(cuadruplo[1])==globalMem.getSymType(cuadruplo[2]) and globalMem.getSymType(cuadruplo[2])=="int":
+			#	cuadruplo[3]=int(cuadruplo[1])+int(cuadruplo[2])
+			print(f'suma= {resultado}')
+			PC=PC+1
+		elif opscode=='-':
+			print("-")
+			PC=PC+1
+		elif opscode=='*':
+			print("*")			
+			PC=PC+1
+		elif opscode=='/':
+			print("/")
+			PC=PC+1
+		elif opscode=='AND':
+			print("AND")
+			PC=PC+1
+		elif opscode=='<':
+			print("<")
+			PC=PC+1
+		elif opscode=='>':
+			print(">")
+			PC=PC+1
+		elif opscode=='==':
+			print("==")
+			PC=PC+1
+		
 	
+	
+			
 	
 def p_main(p):
 	'''
@@ -226,8 +312,7 @@ def p_PC(p):
 	'''
 	PC : 
 	'''
-	global PC; global contCuadruplos; global pilaSaltos
-	PC=0
+	global contCuadruplos; global pilaSaltos
 	cTmp="GOTO"
 	cuadruplos.append(cTmp)
 	contCuadruplos=contCuadruplos+1
