@@ -28,13 +28,41 @@ class memoryST(object):
         for i in self.memory:
             if i[0]==vari:
                 countTMP=countTMP+1
-                print(f"Encontré: {i[0]}")
+                #print(f"Encontré: {i[0]}")
             temp=temp+1
         if countTMP==0:
             if isinstance(vari,int):
                 return "int"
+            if isinstance(vari,float):
+                return "fl"
         else:
-            return self.memory[temp-countTMP][2]
+            return "isvar" #self.memory[temp-countTMP][2]
+    
+    def getSymVal(self,vari1):
+        countTMP=0
+        countTMP1=0
+        temp=0
+        for i in self.memory:
+            if i[0]==vari1:
+                countTMP=countTMP+1
+                countTMP1=temp
+                #print(f"Encontré: {i[0]}")
+            temp=temp+1
+        if countTMP!=0:
+            return self.memory[countTMP1][1]
+    
+    def updateVal(self,vari1,value1):
+        countTMP=0
+        countTMP1=0
+        temp=0
+        for i in self.memory:
+            if i[0]==vari1:
+                countTMP=countTMP+1
+                countTMP1=temp
+                #print(f"Encontré: {i[0]}")
+            temp=temp+1
+        if countTMP!=0:
+            self.memory[countTMP1][1]=value1
             
     def listMTable(self):
         print (np.array(self.memory))
