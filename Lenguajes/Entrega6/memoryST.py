@@ -59,7 +59,7 @@ class memoryST(object):
             if i[0]==vari1:
                 countTMP=countTMP+1
                 countTMP1=temp
-                #print(f"Encontré: {i[0]}")
+                #Encontro la variable
             temp=temp+1
         if countTMP!=0:
             self.memory[countTMP1][1]=value1
