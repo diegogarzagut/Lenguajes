@@ -40,6 +40,8 @@ global pDirValCont
 pDirValCont=0
 global PC
 PC=0
+global cTmp2
+cTmp2=0
 
 
 		
@@ -214,9 +216,9 @@ def p_S(p):
 	for x in cuadruplos:
 		print(f'{t}) {x}')
 		t=t+1
-	#print("\n--- Pila de Saltos ---\n")
-	#for x in pilaSaltos:
-	#	print(x)
+	print("\n--- Pila de Saltos ---\n")
+	for x in pilaSaltos:
+		print(x)
 	print(f"\nEjecución:\n")
 	PC=0
 	while (PC!=-1):
@@ -237,80 +239,95 @@ def p_S(p):
 		elif opscode=="+":
 			tmpq1=globalMem.getSymType(cuadruplo[1])
 			tmpq2=globalMem.getSymType(cuadruplo[2])
+			c1=cuadruplo[1]
+			c2=cuadruplo[2]
+			c3=cuadruplo[3]
 			if tmpq1==tmpq2: #si ambos int o float
-				cuadruplo[3]=cuadruplo[1]+cuadruplo[2]
-				print(f'{cuadruplo[1]}+{cuadruplo[2]}={cuadruplo[3]}')
+				if len(str(c3))>1:
+					if c3[0]=='T':
+						tmp=c3
+						tmp1=int(tmp[1:])
+						avTmps[tmp1]=cuadruplo[1]+cuadruplo[2]
+				print(f'{cuadruplo[1]}+{cuadruplo[2]}={avTmps[tmp1]}')
 			else:
 				if tmpq1=="ivar":
-					cuadruplo[1]=globalMem.getSymVal(cuadruplo[1])
+					c1=globalMem.getSymVal(cuadruplo[1])
 				if tmpq2=="isvar":
-					cuadruplo[2]=globalMem.getSymVal(cuadruplo[2])
-				if len(str(cuadruplo[1]))>1:
-					if cuadruplo[1][0]=='T':
-						tmp=cuadruplo[1]
+					c2=globalMem.getSymVal(cuadruplo[2])
+				if len(str(c1))>1:
+					if c1[0]=='T':
+						tmp=c1
 						tmp1=int(tmp[1:])
-						cuadruplo[1]=avTmps[tmp1]
-						print(tmp1)
-				if len(str(cuadruplo[2]))>1:
-					if cuadruplo[2][0]=='T':
-						tmp=cuadruplo[2]
+						c1=avTmps[tmp1]
+				if len(str(c2))>1:
+					if c2[0]=='T':
+						tmp=c2
 						tmp1=int(tmp[1:])
-						cuadruplo[2]=avTmps[tmp1]
-						print(tmp1)
-				cuadruplo[3]=cuadruplo[1]+cuadruplo[2]
-				print(f'{cuadruplo[1]}+{cuadruplo[2]}={cuadruplo[3]}')
+						c2=avTmps[tmp1]
+				c3=c1+c2
+				print(f'{c1}+{c2}={c3}')
 			PC=PC+1
 		elif opscode=='-':
 			tmpq1=globalMem.getSymType(cuadruplo[1])
 			tmpq2=globalMem.getSymType(cuadruplo[2])
+			c1=cuadruplo[1]
+			c2=cuadruplo[2]
+			c3=cuadruplo[3]
 			if tmpq1==tmpq2: #si ambos int o float
-				cuadruplo[3]=cuadruplo[1]-cuadruplo[2]
-				print(f'{cuadruplo[1]}-{cuadruplo[2]}={cuadruplo[3]}')
+				if len(str(c3))>1:
+					if c3[0]=='T':
+						tmp=c3
+						tmp1=int(tmp[1:])
+						avTmps[tmp1]=cuadruplo[1]-cuadruplo[2]
+				print(f'{cuadruplo[1]}-{cuadruplo[2]}={avTmps[tmp1]}')
 			else:
 				if tmpq1=="ivar":
-					cuadruplo[1]=globalMem.getSymVal(cuadruplo[1])
+					c1=globalMem.getSymVal(cuadruplo[1])
 				if tmpq2=="isvar":
-					cuadruplo[2]=globalMem.getSymVal(cuadruplo[2])
-				if len(str(cuadruplo[1]))>1:
-					if cuadruplo[1][0]=='T':
-						tmp=cuadruplo[1]
+					c2=globalMem.getSymVal(cuadruplo[2])
+				if len(str(c1))>1:
+					if c1[0]=='T':
+						tmp=c1
 						tmp1=int(tmp[1:])
-						cuadruplo[1]=avTmps[tmp1]
-						print(tmp1)
-				if len(str(cuadruplo[2]))>1:
-					if cuadruplo[2][0]=='T':
-						tmp=cuadruplo[2]
+						c1=avTmps[tmp1]
+				if len(str(c2))>1:
+					if c2[0]=='T':
+						tmp=c2
 						tmp1=int(tmp[1:])
-						cuadruplo[2]=avTmps[tmp1]
-						print(tmp1)
-				cuadruplo[3]=cuadruplo[1]-cuadruplo[2]
-				print(f'{cuadruplo[1]}-{cuadruplo[2]}={cuadruplo[3]}')
+						c2=avTmps[tmp1]
+				c3=c1-c2
+				print(f'{c1}-{c2}={c3}')
 			PC=PC+1
 		elif opscode=='*':
 			tmpq1=globalMem.getSymType(cuadruplo[1])
 			tmpq2=globalMem.getSymType(cuadruplo[2])
+			c1=cuadruplo[1]
+			c2=cuadruplo[2]
+			c3=cuadruplo[3]
 			if tmpq1==tmpq2: #si ambos int o float
-				cuadruplo[3]=cuadruplo[1]*cuadruplo[2]
-				print(f'{cuadruplo[1]}*{cuadruplo[2]}={cuadruplo[3]}')
+				if len(str(c3))>1:
+					if c3[0]=='T':
+						tmp=c3
+						tmp1=int(tmp[1:])
+						avTmps[tmp1]=cuadruplo[1]*cuadruplo[2]
+				print(f'{cuadruplo[1]}*{cuadruplo[2]}={avTmps[tmp1]}')
 			else:
 				if tmpq1=="ivar":
-					cuadruplo[1]=globalMem.getSymVal(cuadruplo[1])
+					c1=globalMem.getSymVal(cuadruplo[1])
 				if tmpq2=="isvar":
-					cuadruplo[2]=globalMem.getSymVal(cuadruplo[2])
-				if len(str(cuadruplo[1]))>1:
-					if cuadruplo[1][0]=='T':
-						tmp=cuadruplo[1]
+					c2=globalMem.getSymVal(cuadruplo[2])
+				if len(str(c1))>1:
+					if c1[0]=='T':
+						tmp=c1
 						tmp1=int(tmp[1:])
-						cuadruplo[1]=avTmps[tmp1]
-						print(tmp1)
-				if len(str(cuadruplo[2]))>1:
-					if cuadruplo[2][0]=='T':
-						tmp=cuadruplo[2]
+						c1=avTmps[tmp1]
+				if len(str(c2))>1:
+					if c2[0]=='T':
+						tmp=c2
 						tmp1=int(tmp[1:])
-						cuadruplo[2]=avTmps[tmp1]
-						print(tmp1)
-				cuadruplo[3]=cuadruplo[1]*cuadruplo[2]
-				print(f'{cuadruplo[1]}*{cuadruplo[2]}={cuadruplo[3]}')
+						c2=avTmps[tmp1]
+				c3=c1*c2
+				print(f'{c1}*{c2}={c3}')
 			PC=PC+1
 		elif opscode=='/':
 			tmpq1=globalMem.getSymType(cuadruplo[1])
@@ -342,7 +359,6 @@ def p_S(p):
 			print("AND")
 			PC=PC+1
 		elif opscode=='<':
-			print("<")
 			if globalMem.getSymVal(cuadruplo[1])>globalMem.getSymVal(cuadruplo[2]):
 				print(f'{cuadruplo[1]}<{cuadruplo[2]}= True')
 			else:
@@ -669,12 +685,13 @@ def p_T(p):
 	  | T TIMES F
 	  | T DIVIDE F
 	'''
-	global pOps; global st; global avTmps; global avTmpsCount; global cuadruplos; global contCuadruplos; global pilaSaltos; global pDirVal; global pDirValCont; global PC
+	global cTmp2; global pOps; global st; global avTmps; global avTmpsCount; global cuadruplos; global contCuadruplos; global pilaSaltos; global pDirVal; global pDirValCont; global PC
 	if (len(p)==2):
 		pOps.insert(0,p[1])
 	elif (len(p)==4):
 		p[0]=p[1]
-		if len(pOps)>1:
+		cTmp2=cTmp2+1
+		if len(pOps)>1 and cTmp2>1:
 			op1=pOps.pop(0)
 			op2=pOps.pop(0)
 			if (p[2]=="*"):
