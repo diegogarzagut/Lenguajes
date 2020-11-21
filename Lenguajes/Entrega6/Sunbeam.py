@@ -159,7 +159,7 @@ def t_LT(t):
 	return t
 
 def t_ET(t):
-	r'\=='
+	r'\&'
 	t.type = 'ET'
 	#print("ET")
 	return t
@@ -250,6 +250,8 @@ def p_S(p):
 					tmp=value1
 					tmp1=int(tmp[1:])
 					value1=avTmps[tmp1]
+			if globalMem.getSymType(value1)=="isvar":
+				value1=globalMem.getSymVal(value1)
 			globalMem.updateVal(cuadruplo[2],value1)
 			print(f'{cuadruplo[2]}={value1}')
 			PC=PC+1
@@ -541,7 +543,7 @@ def p_S(p):
 				avTmps[tmp321]=c3
 				#print(f'{c1}<{c2}={c3}')
 			PC=PC+1
-		elif opscode=='==':
+		elif opscode=='&':
 			tmpq1=globalMem.getSymType(cuadruplo[1])
 			tmpq2=globalMem.getSymType(cuadruplo[2])
 			c1=cuadruplo[1]
@@ -556,10 +558,10 @@ def p_S(p):
 						tmp321=tmp1
 					if globalMem.getSymVal(c1)==globalMem.getSymVal(c2):
 						c3=False
-						print(f'{cuadruplo[1]}=={cuadruplo[2]}= False')
+						print(f'{cuadruplo[1]}&{cuadruplo[2]}= False')
 					else:
 						c3=True
-						print(f'{cuadruplo[1]}=={cuadruplo[2]}= True')
+						print(f'{cuadruplo[1]}&{cuadruplo[2]}= True')
 					avTmps[tmp321]=c3
 				#print(f'{cuadruplo[1]}{cuadruplo[2]}={avTmps[tmp1]}')
 			else:
@@ -582,10 +584,10 @@ def p_S(p):
 						tmp1=int(tmp[1:])
 						c2=avTmps[tmp1]
 				if c1==c2:
-					print(f'{cuadruplo[1]}=={cuadruplo[2]}= True')
+					print(f'{cuadruplo[1]}&{cuadruplo[2]}= True')
 					c3=True
 				else:
-					print(f'{cuadruplo[1]}=={cuadruplo[2]}= False')
+					print(f'{cuadruplo[1]}&{cuadruplo[2]}= False')
 					c3=False
 				avTmps[tmp321]=c3
 				#print(f'{c1}<{c2}={c3}')
@@ -1002,11 +1004,11 @@ def p_L(p):
 				avTmps.append("T"+str(avTmpsCount)) # aqui va el resultado
 				pOps.insert(0,avTmps[-1]) #append(avTmps[-1]) 
 				print(f'pOps:{pOps}')
-			elif (p[2]=="=="):
+			elif (p[2]=="&"):
 				print(f'== {op2} {op1} T{avTmpsCount}')
-				cTmp="== "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
+				cTmp="& "+str(op2)+" "+str(op1)+" T"+str(avTmpsCount)
 				cTmp1=[]
-				cTmp1.append("==")
+				cTmp1.append("&")
 				cTmp1.append(op2)
 				cTmp1.append(op1)
 				cTmp1.append("T"+str(avTmpsCount))
