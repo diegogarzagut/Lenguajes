@@ -5,10 +5,12 @@ class memoryST(object):
 
     def addSy(self, symbol_m):
         countTMP=0
+        countTMP1=None
         temp=0
         for i in self.memory:
             if i[0]==symbol_m.var:
                 countTMP=countTMP+1
+                countTMP1=temp
                 print(f"Se repitió: {i[0]}")
             temp=temp+1
         if countTMP==0:
@@ -19,7 +21,7 @@ class memoryST(object):
             self.memory.append(stmp)
             print (np.array(self.memory))
         else:
-            self.memory[temp-countTMP][1]=symbol_m.val
+            self.memory[countTMP1][1]=symbol_m.val
             print (np.array(self.memory))
     
     def getSymType(self,vari):
@@ -63,6 +65,19 @@ class memoryST(object):
             temp=temp+1
         if countTMP!=0:
             self.memory[countTMP1][1]=value1
+    
+    def varExists(self,vari2):
+        countTMP=0
+        temp=0
+        for i in self.memory:
+            if i[0]==vari2:
+                countTMP=countTMP+1
+                #Encontro la variable
+            temp=temp+1
+        if countTMP!=0:
+            return False
+        else:
+            return True
             
     def listMTable(self):
         print (np.array(self.memory))
