@@ -75,9 +75,9 @@ class memoryST(object):
                 #Encontro la variable
             temp=temp+1
         if countTMP!=0:
-            return True
-        else:
             return False
+        else:
+            return True
             
     def listMTable(self):
         print (np.array(self.memory))
@@ -93,4 +93,3 @@ class Symbol_m:
 
     def getType(self):
         return self.vtype
-    

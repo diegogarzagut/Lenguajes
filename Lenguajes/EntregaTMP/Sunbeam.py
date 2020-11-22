@@ -6,10 +6,8 @@ import ply.lex as lex
 import ply.yacc as yacc
 
 import memoryST
-import symboltable
 
-global st
-st = symboltable.SymbolTable()
+
 global globalMem
 globalMem = memoryST.memoryST()
 global auxT
@@ -92,8 +90,7 @@ tokens = [
 	'READ',
 	'PRINT',
 	'LCOR',
-	'RCOR',
-	'MAINF'
+	'RCOR'
 ] + list(reserved.values())
 
 t_ignore  = r' '
@@ -119,11 +116,6 @@ def t_READ(t):
 def t_LCOR(t):
 	r'\{'
 	t.type = 'LCOR'
-	#print(t.type)
-	return t
-def t_MAINF(t):
-	r'mainf'
-	t.type = 'MAINF'
 	#print(t.type)
 	return t
 def t_RCOR(t):
@@ -273,11 +265,6 @@ def p_S(p):
 				val=globalMem.getSymVal(cuadruplo[1])
 				print(f'print: val={val}')
 			PC=PC+1
-		elif opscode=="READ":
-			val= int(input(f'{cuadruplo[1]}: '))
-			if globalMem.varExists(cuadruplo[1]):
-				globalMem.updateVal(cuadruplo[1],val)
-			PC=PC+1
 		elif opscode=="GOTO":
 			PC=cuadruplo[1]
 		elif opscode=="GTF":
@@ -326,9 +313,9 @@ def p_S(p):
 						tmp=c3
 						tmp1=int(tmp[1:])
 						tmp321=tmp1
-						#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+						print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
 						avTmps1[tmp321]=cuadruplo[1]+cuadruplo[2] #cambie
-						#print(avTmps1)
+						print(avTmps1)
 						#avTmps1.insert(0,cuadruplo[1]+cuadruplo[2])
 				print(f'{cuadruplo[1]}+{cuadruplo[2]}={avTmps[tmp1]}')
 			else:
@@ -354,8 +341,8 @@ def p_S(p):
 							c2=avTmps1[tmp1]#cambie
 				c3=c1+c2
 				avTmps1[tmp321]=c3 #cambie
-				#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
-				#print(avTmps1) #cambie
+				print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+				print(avTmps1) #cambie
 				print(f'{c1}+{c2}={c3}')
 			PC=PC+1
 		elif opscode=='-':
@@ -372,8 +359,8 @@ def p_S(p):
 						tmp1=int(tmp[1:])
 						tmp321=tmp1
 						avTmps1[tmp321]=cuadruplo[1]-cuadruplo[2] #cambie
-						#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
-						#print(avTmps1) #cambie
+						print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+						print(avTmps1) #cambie
 						#avTmps1.insert(0,cuadruplo[1]-cuadruplo[2])
 				print(f'{cuadruplo[1]}-{cuadruplo[2]}={avTmps[tmp1]}')
 			else:
@@ -399,8 +386,8 @@ def p_S(p):
 							c2=avTmps1[tmp1] #cambie
 				c3=c1-c2
 				avTmps1[tmp321]=c3 #cambie
-				#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
-				#print(avTmps1) #cambie
+				print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+				print(avTmps1) #cambie
 				print(f'{c1}-{c2}={c3}')
 			PC=PC+1
 		elif opscode=='*':
@@ -417,8 +404,8 @@ def p_S(p):
 						tmp1=int(tmp[1:])
 						tmp321=tmp1
 						avTmps1[tmp321]=cuadruplo[1]*cuadruplo[2] #cambie
-						#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
-						#print(avTmps1) #cambie
+						print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+						print(avTmps1) #cambie
 				print(f'{cuadruplo[1]}*{cuadruplo[2]}={avTmps[tmp1]}')
 			else:
 				if c3[0]=='T':
@@ -443,8 +430,8 @@ def p_S(p):
 							c2=avTmps1[tmp1] #cambie
 				c3=c1*c2
 				avTmps1[tmp321]=c3 #cambie
-				#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
-				#print(avTmps1)#cambie
+				print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+				print(avTmps1)#cambie
 				print(f'{c1}*{c2}={c3}')
 			PC=PC+1
 		elif opscode=='/':
@@ -461,8 +448,8 @@ def p_S(p):
 						tmp1=int(tmp[1:])
 						tmp321=tmp1
 						avTmps1[tmp321]=cuadruplo[1]/cuadruplo[2] #cambie
-						#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
-						#print(avTmps1) #cambie
+						print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+						print(avTmps1) #cambie
 				print(f'{cuadruplo[1]}/{cuadruplo[2]}={avTmps1[tmp1]}')
 			else:
 				if c3[0]=='T':
@@ -487,8 +474,8 @@ def p_S(p):
 							c2=avTmps1[tmp1] #cambie
 				c3=c1/c2
 				avTmps1[tmp321]=c3 #cambie
-				#print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
-				#print(avTmps1)#cambie
+				print(f'PRUEBA:{c3} -> tmp321: {tmp321} tmp1: {tmp1}' )
+				print(avTmps1)#cambie
 				print(f'{c1}/{c2}={c3}')
 			PC=PC+1
 		elif opscode=='AND':
@@ -719,15 +706,6 @@ def p_PC1(p):
 	fin=pilaSaltos.pop(0)
 	cuadruplos[fin][1]=contCuadruplos
 	print(f'PDS PC1: {pilaSaltos}')
-
-# def p_MAINF1(p):
-# 	'''
-# 	MAINF1 : MAINF
-# 		   |
-# 	'''
-# 	global PC; global contCuadruplos; global pilaSaltos
-# 	if len(p)==2:
-# 		cuadruplos[0][1]=contCuadruplos
 	
 def p_PC2(p):
 	'''
@@ -779,8 +757,6 @@ def p_vars0(p):
 	global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	if (len(p)==5):
 		auxID = p[1]
-		sym=symboltable.Symbol(auxID,auxT)
-		st.put(sym)
 		op1=pOps.pop(0)
 		if (p[2]=="="):
 			print(f'= {op1} {p[1]}')
@@ -807,14 +783,18 @@ def p_vars0(p):
 				globalMem.updateVal(auxID,op1)
 		contCuadruplos=contCuadruplos+1
 	if (len(p)==4):
-		print(f'READ {p[3]}')
+		val= int(input(f'{p[3]}: '))
 		auxT="int"
-		symM=memoryST.Symbol_m(p[3],None,auxT)
-		globalMem.addSy(symM)
+		symM=memoryST.Symbol_m(p[3],val,auxT)
+		if globalMem.varExists(p[3]):
+			globalMem.addSy(symM)
+		else:
+			globalMem.updateVal(p[3],val)
+		print(f'= {val} {p[3]}')
 		cTmp1=[]
-		cTmp1.append("READ")
+		cTmp1.append("=")
+		cTmp1.append(val)
 		cTmp1.append(p[3])
-		cTmp1.append(None)
 		cTmp1.append(None)
 		cuadruplos.append(cTmp1)
 		#avTmps.append(str(p[1]))
@@ -838,6 +818,7 @@ def p_MODULO(p):
 	MODULO : FUNCTION ID MOD1 LPAREN RPAREN vars BLOQUE END MODULO MOD2
 	       | 
 	'''	
+	global idTmp; global st; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	
 def p_MOD1(p):
 	'''
@@ -867,7 +848,6 @@ def p_MOD2(p):
 	cuadruplos.append(cTmp2)
 	print(cuadruplos[-1])
 	contCuadruplos=contCuadruplos+1
-	cuadruplos[0][1]=contCuadruplos+1
 
 def p_BLOQUE(p):
 	'''
@@ -889,7 +869,7 @@ def p_ESTATUTO(p):
 			 | DWHILE ESTATUTO DW1 UNTIL ESTATUTO END
 			 | FOR LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO END
 		 	 | BLOQUE
-			 | CALLF
+			 | LCOR ID RCOR
 			 | 
 	'''
 	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
@@ -914,14 +894,6 @@ def p_THEN1(p):
 	#regresar resultado al avail
 	pilaSaltos.insert(0,contCuadruplos-1)
 	print(f'PDS THEN: {pilaSaltos}')
-
-def p_CALLF(p):
-	'''
-	CALLF :
-	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
-	#if len(p)==3:
-		
 
 def p_IF1(p):
 	'''
