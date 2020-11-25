@@ -721,7 +721,6 @@ def p_PC(p):
 	PC : 
 	'''
 	global contCuadruplos; global pilaSaltos
-	cTmp="GOTO"
 	cTmp1=[]
 	cTmp1.append("GOTO")
 	cTmp1.append(None)
@@ -729,15 +728,14 @@ def p_PC(p):
 	cTmp1.append(None)
 	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
-	#regresar resultado al avail
-	pilaSaltos.insert(0,contCuadruplos-1)
+	pilaSaltos.append(contCuadruplos-1)
 
 def p_PC1(p):
 	'''
 	PC1 : 
 	'''
 	global PC; global contCuadruplos; global pilaSaltos
-	fin=pilaSaltos.pop(0)
+	fin=pilaSaltos.pop()
 	cuadruplos[fin][1]=contCuadruplos
 	print(f'PDS PC1: {pilaSaltos}')
 	
@@ -797,7 +795,6 @@ def p_vars0(p):
 		op1=pOps.pop(0)
 		if (p[2]=="="):
 			print(f'= {op1} {p[1]}')
-			cTmp="= "+str(op1)+" "+str(p[1])
 			cTmp1=[]
 			cTmp1.append("=")
 			cTmp1.append(op1)
@@ -830,6 +827,7 @@ def p_vars0(p):
 		cTmp1.append(None)
 		cTmp1.append(None)
 		cuadruplos.append(cTmp1)
+		contCuadruplos=contCuadruplos+1
 		#avTmps.append(str(p[1]))
 		#pOps.insert(0,avTmps[-1])
 		print(pOps)
@@ -842,6 +840,7 @@ def p_vars0(p):
 		cTmp1.append(None)
 		cTmp1.append(None)
 		cuadruplos.append(cTmp1)
+		contCuadruplos=contCuadruplos+1
 		#avTmps.append(str(p[1]))
 		#pOps.insert(0,avTmps[-1])
 		#print(pOps)
@@ -881,7 +880,7 @@ def p_MOD2(p):
 	cuadruplos.append(cTmp2)
 	print(cuadruplos[-1])
 	contCuadruplos=contCuadruplos+1
-	cuadruplos[0][1]=contCuadruplos+1
+	cuadruplos[0][1]=contCuadruplos
 
 def p_BLOQUE(p):
 	'''
@@ -912,7 +911,7 @@ def p_THEN1(p):
 	THEN1 : 
 	'''
 	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
-	#print(f'PDS THEN: {pilaSaltos}')
+	#print(f'ContCuadruplos: {contCuadruplos}')
 	resultado = pOps.pop(0)
 	print(pOps)
 	cTmp="GTF "+str(resultado)
@@ -934,6 +933,7 @@ def p_CALLF(p):
 	'''
 	global pProcs; global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	if len(p)==3:
+		print(f'ContCuadruplos: {contCuadruplos}')
 		cTmp1=[]
 		cTmp1.append("CALL")
 		cTmp1.append(pProcs[0])
@@ -988,7 +988,9 @@ def p_WHILE1(p):
 	'''
 	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS WHILE1: {pilaSaltos}')
-	pilaSaltos.insert(0,contCuadruplos)
+	print(f'ContCuadruplos: {contCuadruplos}')
+	#pilaSaltos.insert(0,contCuadruplos)
+	pilaSaltos.append(contCuadruplos)
 	print(f'PDS WHILE1: {pilaSaltos}')
 
 def p_WHILE2(p):
@@ -997,8 +999,9 @@ def p_WHILE2(p):
 	'''
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS WHILE2: {pilaSaltos}')
+	print(f'GTF:{contCuadruplos}')
+	print(f'ContCuadruplos: {contCuadruplos}')
 	ANS=pOps.pop(0)
-	cTmp="GTF "+str(ANS)
 	cTmp1=[]
 	cTmp1.append("GTF")
 	cTmp1.append(ANS)
@@ -1016,20 +1019,18 @@ def p_WHILE3(p):
 	'''
 	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS WHILE3: {pilaSaltos}')
-	dir1= pilaSaltos.pop(0)
-	dir2= pilaSaltos.pop(0)
-	cTmp="GOTO "+str(dir1)
+	print(f'ContCuadruplos: {contCuadruplos}')
+	dir1= pilaSaltos.pop()
+	dir2= pilaSaltos.pop()
 	cTmp1=[]
 	cTmp1.append("GOTO")
-	cTmp1.append(dir1)
+	cTmp1.append(dir2)
 	cTmp1.append(None)
 	cTmp1.append(None)
 	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
-	cuadruplos[dir2][2]=contCuadruplos+1
+	cuadruplos[dir1][2]=contCuadruplos
 	print(f'PDS WHILE3: {pilaSaltos}')
-
-
 
 def p_DW1(p):
 	'''
