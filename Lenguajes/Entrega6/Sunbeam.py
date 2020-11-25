@@ -916,6 +916,8 @@ def p_THEN1(p):
 	print(pOps)
 	cTmp="GTF "+str(resultado)
 	cTmp1=[]
+	#PRUEBA RODRIGO
+
 	cTmp1.append("GTF")
 	cTmp1.append(resultado)
 	cTmp1.append(None)
