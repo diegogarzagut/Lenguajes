@@ -51,6 +51,10 @@ global pProcs
 pProcs=[]
 global pProcsCont
 pProcsCont=0
+global callcont
+callcont=None
+global pExec
+pExec=[]
 
 		
 reserved = {
@@ -66,7 +70,8 @@ reserved = {
 	'fl' : 'FL',
 	'bool': 'BOOL',
 	'and': 'AND',
-	'or' :'OR'
+	'or' :'OR',
+	'call':'CALL'
  }
 tokens = [
 	'MAIN',
@@ -115,6 +120,10 @@ def t_READ(t):
 	r'read'
 	t.type = 'READ'
 	#print(t.type)
+	return t
+def t_CALL(t):
+	r'call'
+	t.type = 'CALL'
 	return t
 def t_LCOR(t):
 	r'\{'
@@ -234,7 +243,7 @@ def p_S(p):
 	'''
 	S : main
 	'''
-	global cuadruplos; global contCuadruplos; global avTmps; global avTmpsCount; global pilaSaltos; global pDirValCont; global PC; global globalMem
+	global callcont; global cuadruplos; global contCuadruplos; global avTmps; global avTmpsCount; global pilaSaltos; global pDirValCont; global PC; global globalMem
 	print("\t\t\t\t Sintaxis Correcto")
 	print("--- Tabla de simbolos ---")
 	print(f'Var  Valor  Tipo')
@@ -267,8 +276,11 @@ def p_S(p):
 		if opscode=="ENDP":
 			print("ENDP")
 			PC=-1
+		elif opscode=="ENDPROC":
+			print("ENDPROC")
+			PC=pExec.pop(0)
 		elif opscode=="PRINT":
-			globalMem.listMTable()
+			#globalMem.listMTable()
 			if isinstance(cuadruplo[1],str):
 				val=globalMem.getSymVal(cuadruplo[1])
 				print(f'print: val={val}')
@@ -278,6 +290,10 @@ def p_S(p):
 			if globalMem.varExists(cuadruplo[1]):
 				globalMem.updateVal(cuadruplo[1],val)
 			PC=PC+1
+		elif opscode=="CALL":
+			#callcont=PC+1
+			pExec.insert(0,PC+1)
+			PC=cuadruplo[1]
 		elif opscode=="GOTO":
 			PC=cuadruplo[1]
 		elif opscode=="GTF":
@@ -310,7 +326,11 @@ def p_S(p):
 					tmp=dest
 					tmp1=int(tmp[1:])
 					dest=avTmps1[tmp1] #cambie
-			globalMem.updateVal(dest,value1)
+			if globalMem.varExists(dest):
+				globalMem.updateVal(dest,value1)
+			else:
+				symMT=memoryST.Symbol_m(dest,value1,"int")
+				globalMem.addSy(symMT)
 			print(f'{dest}={value1}')
 			PC=PC+1
 		elif opscode=="+":
@@ -448,11 +468,12 @@ def p_S(p):
 				print(f'{c1}*{c2}={c3}')
 			PC=PC+1
 		elif opscode=='/':
-			tmpq1=globalMem.getSymType(cuadruplo[1])
-			tmpq2=globalMem.getSymType(cuadruplo[2])
 			c1=cuadruplo[1]
 			c2=cuadruplo[2]
 			c3=cuadruplo[3]
+			tmpq1=globalMem.getSymType(cuadruplo[1])
+			tmpq2=globalMem.getSymType(cuadruplo[2])
+			#globalMem.listMTable()
 			tmp321=None
 			if (tmpq1=="int" or tmpq1=="fl") and (tmpq2=="int" or tmpq2=="fl") : #si ambos int o float
 				if len(str(c3))>1:
@@ -684,11 +705,11 @@ def p_S(p):
 				avTmps1[tmp321]=c3#cambie
 				#print(f'{c1}<{c2}={c3}')
 			PC=PC+1
-	print("\n--- Avails ---")
-	tempo=0
-	for x in avTmps:
-		print(f'T{tempo} = {x}')
-		tempo=tempo+1
+	#print("\n--- Avails ---")
+	#tempo=0
+	#for x in avTmps:
+	#	print(f'T{tempo} = {x}')
+	#	tempo=tempo+1
 		
 
 def p_main(p):
@@ -719,15 +740,6 @@ def p_PC1(p):
 	fin=pilaSaltos.pop(0)
 	cuadruplos[fin][1]=contCuadruplos
 	print(f'PDS PC1: {pilaSaltos}')
-
-# def p_MAINF1(p):
-# 	'''
-# 	MAINF1 : MAINF
-# 		   |
-# 	'''
-# 	global PC; global contCuadruplos; global pilaSaltos
-# 	if len(p)==2:
-# 		cuadruplos[0][1]=contCuadruplos
 	
 def p_PC2(p):
 	'''
@@ -774,6 +786,7 @@ def p_vars0(p):
 	vars0  : ID EQUAL F SEMICOLON
 		   | READ EQUAL ID
 		   | PRINT ID
+		   | CALLF
 	       |
 	'''
 	global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
@@ -845,20 +858,21 @@ def p_MOD1(p):
 	'''	
 	global pProcs; global pProcsCont; global idTmp; global st; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	pProcs.insert(0,contCuadruplos)
+	#print(f'pProcs:{pProcs}')
 
 def p_MOD2(p):
 	'''
 	MOD2 : 
 	'''	
 	global pProcs; global pProcsCont; global idTmp; global st; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
-	cTmp1=[]
-	cTmp1.append("CALL")
-	cTmp1.append(pProcs.pop(0))
-	cTmp1.append(None)
-	cTmp1.append(None)
-	cuadruplos.append(cTmp1)
-	print(cuadruplos[-1])
-	contCuadruplos=contCuadruplos+1
+	#cTmp1=[]
+	#cTmp1.append("CALL")
+	#cTmp1.append(pProcs[0])
+	#cTmp1.append(None)
+	#cTmp1.append(None)
+	#cuadruplos.append(cTmp1)
+	#print(cuadruplos[-1])
+	#contCuadruplos=contCuadruplos+1
 	cTmp2=[]
 	cTmp2.append("ENDPROC")
 	cTmp2.append(None)
@@ -889,8 +903,7 @@ def p_ESTATUTO(p):
 			 | DWHILE ESTATUTO DW1 UNTIL ESTATUTO END
 			 | FOR LPAREN vars PIPE L PIPE vars RPAREN ESTATUTO END
 		 	 | BLOQUE
-			 | CALLF
-			 | 
+			 |
 	'''
 	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 
@@ -898,7 +911,7 @@ def p_THEN1(p):
 	'''
 	THEN1 : 
 	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	#print(f'PDS THEN: {pilaSaltos}')
 	resultado = pOps.pop(0)
 	print(pOps)
@@ -917,11 +930,18 @@ def p_THEN1(p):
 
 def p_CALLF(p):
 	'''
-	CALLF :
+	CALLF : CALL ID 
 	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
-	#if len(p)==3:
-		
+	global pProcs; global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	if len(p)==3:
+		cTmp1=[]
+		cTmp1.append("CALL")
+		cTmp1.append(pProcs[0])
+		cTmp1.append(None)
+		cTmp1.append(None)
+		cuadruplos.append(cTmp1)
+		print(cuadruplos[-1])
+		contCuadruplos=contCuadruplos+1
 
 def p_IF1(p):
 	'''
@@ -1006,8 +1026,7 @@ def p_WHILE3(p):
 	cTmp1.append(None)
 	cuadruplos.append(cTmp1)
 	contCuadruplos=contCuadruplos+1
-	#regresar resultado al avail
-	cuadruplos[dir2][2]=contCuadruplos
+	cuadruplos[dir2][2]=contCuadruplos+1
 	print(f'PDS WHILE3: {pilaSaltos}')
 
 
@@ -1238,6 +1257,12 @@ def p_D1(p):
 
 def p_error(p):
 	print(f"Syntax error at {p.value!r}")
+	global cuadruplos
+	print(f"\nCuadruplos: ({contCuadruplos})")
+	t=0
+	for x in cuadruplos:
+		print(f'{t}) {x}')
+		t=t+1
 
 parser = yacc.yacc()
 
