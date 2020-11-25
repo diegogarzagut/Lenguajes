@@ -948,13 +948,13 @@ def p_IF1(p):
 	IF1 : ELSE ELSE1 ESTATUTO
 		| 
 	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 
 def p_ELSE1(p):
 	'''
 	ELSE1 : 
 	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS ELSE: {pilaSaltos}')
 	cTmp="GOTO"
 	cTmp1=[]
@@ -975,7 +975,7 @@ def p_FINIF(p):
 	'''
 	FINIF : 
 	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS FINIF: {pilaSaltos}')
 	fin=pilaSaltos.pop(0)
 	#cuadruplos[fin]=cuadruplos[fin]+" "+str(contCuadruplos)
@@ -986,7 +986,7 @@ def p_WHILE1(p):
 	'''
 	WHILE1 : 
 	'''
-	global pOps; global contIF; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	global pOps; global pilaSaltos; global cuadruplos; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	print(f'PDS WHILE1: {pilaSaltos}')
 	pilaSaltos.insert(0,contCuadruplos)
 	print(f'PDS WHILE1: {pilaSaltos}')
