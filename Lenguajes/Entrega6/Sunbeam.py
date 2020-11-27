@@ -71,6 +71,15 @@ global M1
 M1=1
 global M2
 M2=1
+global pM
+pM=[]
+global pM1
+pM1=[]
+global pM2
+pM2=[]
+
+
+
 
 		
 reserved = {
@@ -808,7 +817,7 @@ def p_vars0(p):
 		   | ID COLON LBRKT ARR1 RBRKT
 	       |
 	'''
-	global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	global pM; global pM1; global pM2; global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	if (len(p)==6):
 		auxID=p[1]
 		print(pBases)
@@ -877,17 +886,25 @@ def p_ARR1(p):
 	     | CTE_INT COMA CTE_INT
 		 | CTE_INT COMA CTE_INT COMA CTE_INT
 	'''	
-	global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
+	global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
 	if len(p)==2:
 		dimsize1=p[1]
 		M=p[1]
-		pBases.append(M)
+		base=0
+		for x in pBases:
+			base=base+x
+		base=base+M
+		pBases.append(base)
 	elif len(p)==4:
 		dimsize1=p[1]
 		dimsize2=p[3]
 		M=p[1]*p[3]
 		M1=M/dimsize1
-		pBases.append(M)
+		base=0
+		for x in pBases:
+			base=base+x
+		base=base+M
+		pBases.append(base)
 	elif len(p)==6:
 		dimsize1=p[1]
 		dimsize2=p[3]
@@ -895,7 +912,12 @@ def p_ARR1(p):
 		M=p[1]*p[3]*p[5]
 		M1=M/dimsize1
 		M2=M1/dimsize2
-		pBases.append(M)
+		base=0
+		for x in pBases:
+			base=base+x
+		base=base+M
+		pBases.append(base)
+		
 
 
 def p_MODULO(p):
