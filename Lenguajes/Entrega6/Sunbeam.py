@@ -60,11 +60,11 @@ memArreglos=[None]*1000
 global pBases
 pBases=[0]
 global dimsize1
-dimsize1=1
+dimsize1=[]
 global dimsize2
-dimsize2=1
+dimsize2=[]
 global dimsize3
-dimsize3=1
+dimsize3=[]
 global M
 M=1
 global M1
@@ -357,7 +357,7 @@ def p_S(p):
 			if globalMem.varExists(dest):
 				globalMem.updateVal(dest,value1)
 			else:
-				symMT=memoryST.Symbol_m(dest,value1,"int",False,None,None,None,None,None)
+				symMT=memoryST.Symbol_m(dest,value1,"int",False,None,None,None,None,None,None,None,None)
 				globalMem.addSy(symMT)
 			print(f'{dest}={value1}')
 			PC=PC+1
@@ -820,7 +820,7 @@ def p_vars0(p):
 	if (len(p)==6):
 		auxID=p[1]
 		print(pBases)
-		symM=memoryST.Symbol_m(auxID,None,"int",True,pBases.pop(0),numDim.pop(0),pM.pop(0),pM1.pop(0),pM2.pop(0)) 
+		symM=memoryST.Symbol_m(auxID,None,"int",True,pBases.pop(0),numDim.pop(0),pM.pop(0),pM1.pop(0),pM2.pop(0),dimsize1.pop(0),dimsize2.pop(0),dimsize3.pop(0),) 
 		globalMem.addSy(symM)
 	if (len(p)==5):
 		auxID = p[1]
@@ -844,7 +844,7 @@ def p_vars0(p):
 			# 			tmp=op1
 			# 			tmp1=int(tmp[1:])
 			# 			op1=avTmps1[tmp1]#cambie
-			symM=memoryST.Symbol_m(auxID,op1,auxT,False,None,None,None,None,None)
+			symM=memoryST.Symbol_m(auxID,op1,auxT,False,None,None,None,None,None,None,None,None)
 			if globalMem.varExists(auxID):
 				globalMem.addSy(symM)
 			else:
@@ -853,7 +853,7 @@ def p_vars0(p):
 	if (len(p)==4):
 		print(f'READ {p[3]}')
 		auxT="int"
-		symM=memoryST.Symbol_m(p[3],None,auxT,False,None,None,None,None,None)
+		symM=memoryST.Symbol_m(p[3],None,auxT,False,None,None,None,None,None,None,None,None)
 		globalMem.addSy(symM)
 		cTmp1=[]
 		cTmp1.append("READ")
@@ -888,9 +888,9 @@ def p_ARR1(p):
 	global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
 	if len(p)==2:
 		numDim.append(1)
-		dimsize1=p[1]
-		dimsize2=None
-		dimsize3=None
+		dimsize1.append(p[1])
+		dimsize2.append(None)
+		dimsize3.append(None)
 		M=p[1]
 		pM.append(M)
 		pM1.append(None)
@@ -905,11 +905,11 @@ def p_ARR1(p):
 		pBases.append(base)
 	elif len(p)==4:
 		numDim.append(2)
-		dimsize1=p[1]
-		dimsize2=p[3]
-		dimsize3=None
+		dimsize1.append(p[1])
+		dimsize2.append(p[3])
+		dimsize3.append(None)
 		M=p[1]*p[3]
-		M1=M/dimsize1
+		M1=M/p[1] #dimsize1
 		pM.append(M)
 		pM1.append(M1)
 		pM2.append(None)
@@ -920,12 +920,12 @@ def p_ARR1(p):
 		pBases.append(base)
 	elif len(p)==6:
 		numDim.append(3)
-		dimsize1=p[1]
-		dimsize2=p[3]
-		dimsize3=p[5]
+		dimsize1.append(p[1])
+		dimsize2.append(p[3])
+		dimsize3.append(p[5])
 		M=p[1]*p[3]*p[5]
-		M1=M/dimsize1
-		M2=M1/dimsize2
+		M1=M/p[1]
+		M2=M1/p[3]
 		pM.append(M)
 		pM1.append(M1)
 		pM2.append(M2)

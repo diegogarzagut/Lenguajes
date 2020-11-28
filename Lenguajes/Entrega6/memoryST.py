@@ -24,6 +24,9 @@ class memoryST(object):
             stmp.append(symbol_m.M) 
             stmp.append(symbol_m.M1) 
             stmp.append(symbol_m.M2)
+            stmp.append(symbol_m.d1) 
+            stmp.append(symbol_m.d2) 
+            stmp.append(symbol_m.d3)
             self.memory.append(stmp)
             print (np.array(self.memory))
         else:
@@ -92,7 +95,7 @@ class memoryST(object):
 
 
 class Symbol_m:
-    def __init__(self,var,val,vtype,dim,dimB,numdim,M,M1,M2):
+    def __init__(self,var,val,vtype,dim,dimB,numdim,M,M1,M2,d1,d2,d3):
         self.var = var 
         self.val = val 
         self.vtype = vtype 
@@ -102,6 +105,9 @@ class Symbol_m:
         self.M=M  
         self.M1=M1  
         self.M2=M2 
+        self.d1=d1
+        self.d2=d2
+        self.d3=d3
 
     def getType(self):
         return self.vtype
