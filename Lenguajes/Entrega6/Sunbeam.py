@@ -357,7 +357,7 @@ def p_S(p):
 			if globalMem.varExists(dest):
 				globalMem.updateVal(dest,value1)
 			else:
-				symMT=memoryST.Symbol_m(dest,value1,"int",False,None,None)
+				symMT=memoryST.Symbol_m(dest,value1,"int",False,None,None,None,None,None)
 				globalMem.addSy(symMT)
 			print(f'{dest}={value1}')
 			PC=PC+1
@@ -820,7 +820,7 @@ def p_vars0(p):
 	if (len(p)==6):
 		auxID=p[1]
 		print(pBases)
-		symM=memoryST.Symbol_m(auxID,None,"int",True,pBases.pop(0),numDim.pop(0)) 
+		symM=memoryST.Symbol_m(auxID,None,"int",True,pBases.pop(0),numDim.pop(0),pM.pop(0),pM1.pop(0),pM2.pop(0)) 
 		globalMem.addSy(symM)
 	if (len(p)==5):
 		auxID = p[1]
@@ -844,7 +844,7 @@ def p_vars0(p):
 			# 			tmp=op1
 			# 			tmp1=int(tmp[1:])
 			# 			op1=avTmps1[tmp1]#cambie
-			symM=memoryST.Symbol_m(auxID,op1,auxT,False,None,None)
+			symM=memoryST.Symbol_m(auxID,op1,auxT,False,None,None,None,None,None)
 			if globalMem.varExists(auxID):
 				globalMem.addSy(symM)
 			else:
@@ -853,7 +853,7 @@ def p_vars0(p):
 	if (len(p)==4):
 		print(f'READ {p[3]}')
 		auxT="int"
-		symM=memoryST.Symbol_m(p[3],None,auxT,False,None,None)
+		symM=memoryST.Symbol_m(p[3],None,auxT,False,None,None,None,None,None)
 		globalMem.addSy(symM)
 		cTmp1=[]
 		cTmp1.append("READ")
