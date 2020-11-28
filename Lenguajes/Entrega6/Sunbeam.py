@@ -77,9 +77,8 @@ global pM1
 pM1=[]
 global pM2
 pM2=[]
-
-
-
+global numDim
+numDim=[]
 
 		
 reserved = {
@@ -358,7 +357,7 @@ def p_S(p):
 			if globalMem.varExists(dest):
 				globalMem.updateVal(dest,value1)
 			else:
-				symMT=memoryST.Symbol_m(dest,value1,"int",False,None)
+				symMT=memoryST.Symbol_m(dest,value1,"int",False,None,None)
 				globalMem.addSy(symMT)
 			print(f'{dest}={value1}')
 			PC=PC+1
@@ -817,11 +816,11 @@ def p_vars0(p):
 		   | ID COLON LBRKT ARR1 RBRKT
 	       |
 	'''
-	global pM; global pM1; global pM2; global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	global numDim; global pM; global pM1; global pM2; global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
 	if (len(p)==6):
 		auxID=p[1]
 		print(pBases)
-		symM=memoryST.Symbol_m(auxID,None,"int",True,pBases.pop(0)) #dimB)
+		symM=memoryST.Symbol_m(auxID,None,"int",True,pBases.pop(0),numDim.pop(0)) 
 		globalMem.addSy(symM)
 	if (len(p)==5):
 		auxID = p[1]
@@ -845,7 +844,7 @@ def p_vars0(p):
 			# 			tmp=op1
 			# 			tmp1=int(tmp[1:])
 			# 			op1=avTmps1[tmp1]#cambie
-			symM=memoryST.Symbol_m(auxID,op1,auxT,False,None)
+			symM=memoryST.Symbol_m(auxID,op1,auxT,False,None,None)
 			if globalMem.varExists(auxID):
 				globalMem.addSy(symM)
 			else:
@@ -854,7 +853,7 @@ def p_vars0(p):
 	if (len(p)==4):
 		print(f'READ {p[3]}')
 		auxT="int"
-		symM=memoryST.Symbol_m(p[3],None,auxT,False,None)
+		symM=memoryST.Symbol_m(p[3],None,auxT,False,None,None)
 		globalMem.addSy(symM)
 		cTmp1=[]
 		cTmp1.append("READ")
@@ -886,32 +885,50 @@ def p_ARR1(p):
 	     | CTE_INT COMA CTE_INT
 		 | CTE_INT COMA CTE_INT COMA CTE_INT
 	'''	
-	global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
+	global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
 	if len(p)==2:
+		numDim.append(1)
 		dimsize1=p[1]
+		dimsize2=None
+		dimsize3=None
 		M=p[1]
+		pM.append(M)
+		pM1.append(None)
+		pM2.append(None)
+		pM1.append(None)
+		pM2.append(None)
+		pM1.append(None)
 		base=0
 		for x in pBases:
 			base=base+x
 		base=base+M
 		pBases.append(base)
 	elif len(p)==4:
+		numDim.append(2)
 		dimsize1=p[1]
 		dimsize2=p[3]
+		dimsize3=None
 		M=p[1]*p[3]
 		M1=M/dimsize1
+		pM.append(M)
+		pM1.append(M1)
+		pM2.append(None)
 		base=0
 		for x in pBases:
 			base=base+x
 		base=base+M
 		pBases.append(base)
 	elif len(p)==6:
+		numDim.append(3)
 		dimsize1=p[1]
 		dimsize2=p[3]
 		dimsize3=p[5]
 		M=p[1]*p[3]*p[5]
 		M1=M/dimsize1
 		M2=M1/dimsize2
+		pM.append(M)
+		pM1.append(M1)
+		pM2.append(M2)
 		base=0
 		for x in pBases:
 			base=base+x
