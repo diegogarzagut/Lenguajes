@@ -96,18 +96,18 @@ class memoryST(object):
 
 class Symbol_m:
     def __init__(self,var,val,vtype,dim,dimB,numdim,M,M1,M2,d1,d2,d3):
-        self.var = var 
-        self.val = val 
-        self.vtype = vtype 
-        self.dim = dim 
-        self.dimB = dimB 
-        self.numdim=numdim 
-        self.M=M  
-        self.M1=M1  
-        self.M2=M2 
-        self.d1=d1
-        self.d2=d2
-        self.d3=d3
+        self.var = var #0
+        self.val = val #1
+        self.vtype = vtype #2 
+        self.dim = dim #3
+        self.dimB = dimB #4
+        self.numdim=numdim #5
+        self.M=M  #6
+        self.M1=M1  #7
+        self.M2=M2 #8
+        self.d1=d1 #9
+        self.d2=d2 #10
+        self.d3=d3 #11
 
     def getType(self):
         return self.vtype
