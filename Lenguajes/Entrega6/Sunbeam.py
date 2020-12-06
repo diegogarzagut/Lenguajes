@@ -819,12 +819,13 @@ def p_vars0(p):
 		   | PRINT ID
 		   | CALLF
 		   | ID COLON LBRKT ARR1 RBRKT
-		   | DIR LBRKT DIR1 RBRKT EQUAL CTE_INT
+		   | DIR LBRKT DIR1 
 	       |
 	'''
 	global numDim; global pM; global pM1; global pM2; global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
-	if (len(p)==8):
+	if (p[1]=="dir"):
 		p[0]=p[2]
+		print("dir")
 	if (len(p)==6):
 		auxID=p[1]
 		print(pBases)
@@ -858,7 +859,7 @@ def p_vars0(p):
 			else:
 				globalMem.updateVal(auxID,op1)
 		contCuadruplos=contCuadruplos+1
-	if (len(p)==4):
+	if (len(p)==4 and p[1]=="read"):
 		print(f'READ {p[3]}')
 		auxT="int"
 		symM=memoryST.Symbol_m(p[3],None,auxT,False,None,None,None,None,None,None,None,None)
@@ -889,22 +890,46 @@ def p_vars0(p):
 
 def p_DIR1(p):
 	'''
-	DIR1 : ID COMA CTE_INT
-	     | ID COMA CTE_INT COMA CTE_INT
-		 | ID COMA CTE_INT COMA CTE_INT COMA CTE_INT
+	DIR1 : ID COMA CTE_INT RBRKT EQUAL CTE_INT
+	     | ID COMA CTE_INT COMA CTE_INT RBRKT EQUAL CTE_INT
+		 | ID COMA CTE_INT COMA CTE_INT COMA CTE_INT RBRKT EQUAL CTE_INT
 	'''	
 	global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
-	if len(p)==4:
+	if len(p)==7:
 		print(p[1])
 		idtmp1=globalMem.getSymIndx(p[1])	
-		print(idtmp1)
-	if len(p)==6:
+		s1=p[3]
+		base=globalMem.memory[idtmp1][4]
+		valor=p[6]
+		dirT=s1+base
+		memArreglos[int(dirT)]=valor
+		print(f'{p[1]}[{s1}]={valor}\tMemoria Global[{int(dirT)}]')
+	if len(p)==9:
 		print(p[1])
 		idtmp1=globalMem.getSymIndx(p[1])
-		print(idtmp1)
-	if len(p)==8:
+		s1=p[3]
+		s2=p[5]
+		m1=globalMem.memory[idtmp1][7]
+		base=globalMem.memory[idtmp1][4]
+		valor=p[8]
+		dirT=s1*m1+s2+base
+		print(dirT)
+		memArreglos[int(dirT)]=valor
+		print(f'{p[1]}[{s1}][{s2}]={valor}\tMemoria Global[{int(dirT)}]')
+	if len(p)==11:
 		print(p[1])
 		idtmp1=globalMem.getSymIndx(p[1])
+		s1=p[3]
+		s2=p[5]
+		s3=p[7]
+		m1=globalMem.memory[idtmp1][7]
+		m2=globalMem.memory[idtmp1][8]
+		base=globalMem.memory[idtmp1][4]
+		valor=p[10]
+		dirT=s1*m1+s2*m2+s3+base
+		print(dirT)
+		memArreglos[int(dirT)]=valor
+		print(f'{p[1]}[{s1}][{s2}][{s3}]={valor}\tMemoria Global[{int(dirT)}]')
 		print(idtmp1)
 
 def p_ARR1(p):
@@ -923,9 +948,6 @@ def p_ARR1(p):
 		pM.append(M)
 		pM1.append(None)
 		pM2.append(None)
-		pM1.append(None)
-		pM2.append(None)
-		pM1.append(None)
 		base=0
 		for x in pBases:
 			base=base+x
