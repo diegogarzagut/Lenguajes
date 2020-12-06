@@ -124,6 +124,7 @@ tokens = [
 	'RCOR',
 	'LBRKT',
 	'RBRKT',
+	'DIR',
 	'MAINF'
 ] + list(reserved.values())
 
@@ -152,6 +153,10 @@ def t_READ(t):
 def t_CALL(t):
 	r'call'
 	t.type = 'CALL'
+	return t
+def t_DIR(t):
+	r'dir'
+	t.type = 'DIR'
 	return t
 def t_LCOR(t):
 	r'\{'
@@ -814,9 +819,12 @@ def p_vars0(p):
 		   | PRINT ID
 		   | CALLF
 		   | ID COLON LBRKT ARR1 RBRKT
+		   | DIR LBRKT DIR1 RBRKT EQUAL CTE_INT
 	       |
 	'''
 	global numDim; global pM; global pM1; global pM2; global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
+	if (len(p)==8):
+		p[0]=p[2]
 	if (len(p)==6):
 		auxID=p[1]
 		print(pBases)
@@ -878,6 +886,26 @@ def p_vars0(p):
 		#avTmps.append(str(p[1]))
 		#pOps.insert(0,avTmps[-1])
 		#print(pOps)
+
+def p_DIR1(p):
+	'''
+	DIR1 : ID COMA CTE_INT
+	     | ID COMA CTE_INT COMA CTE_INT
+		 | ID COMA CTE_INT COMA CTE_INT COMA CTE_INT
+	'''	
+	global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
+	if len(p)==4:
+		print(p[1])
+		idtmp1=globalMem.getSymIndx(p[1])	
+		print(idtmp1)
+	if len(p)==6:
+		print(p[1])
+		idtmp1=globalMem.getSymIndx(p[1])
+		print(idtmp1)
+	if len(p)==8:
+		print(p[1])
+		idtmp1=globalMem.getSymIndx(p[1])
+		print(idtmp1)
 
 def p_ARR1(p):
 	'''

@@ -62,6 +62,19 @@ class memoryST(object):
         if countTMP!=0:
             return self.memory[countTMP1][1]
     
+    def getSymIndx(self,vari1):
+        countTMP=0
+        countTMP1=0
+        temp=0
+        for i in self.memory:
+            if i[0]==vari1:
+                countTMP=countTMP+1
+                countTMP1=temp
+                #print(f"Encontré: {i[0]}")
+            temp=temp+1
+        if countTMP!=0:
+            return countTMP1
+
     def updateVal(self,vari1,value1):
         countTMP=0
         countTMP1=0
