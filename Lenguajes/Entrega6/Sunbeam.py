@@ -312,8 +312,11 @@ def p_S(p):
 		elif opscode=="ENDPROC":
 			print("ENDPROC")
 			PC=pExec.pop(0)
-		elif opscode=="PRINT":
-			#globalMem.listMTable()
+		elif opscode=="DIR":
+			print("DIR")
+			memArreglos[cuadruplo[2]]=cuadruplo[3]
+			PC=PC+1
+		elif opscode=="PRINT":#globalMem.listMTable()
 			if isinstance(cuadruplo[1],str):
 				val=globalMem.getSymVal(cuadruplo[1])
 				print(f'print: val={val}')
@@ -823,8 +826,7 @@ def p_vars0(p):
 	       |
 	'''
 	global numDim; global pM; global pM1; global pM2; global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
-	if (p[1]=="dir"):
-		p[0]=p[2]
+	if (p[1]=="dir"):#p[0]=p[2]
 		print("dir")
 	if (len(p)==6):
 		auxID=p[1]
@@ -890,47 +892,104 @@ def p_vars0(p):
 
 def p_DIR1(p):
 	'''
-	DIR1 : ID COMA CTE_INT RBRKT EQUAL CTE_INT
-	     | ID COMA CTE_INT COMA CTE_INT RBRKT EQUAL CTE_INT
-		 | ID COMA CTE_INT COMA CTE_INT COMA CTE_INT RBRKT EQUAL CTE_INT
+	DIR1 : ID COMA IDCTE RBRKT EQUAL IDCTE
+	     | ID COMA IDCTE COMA IDCTE RBRKT EQUAL IDCTE
+		 | ID COMA IDCTE COMA IDCTE COMA IDCTE RBRKT EQUAL IDCTE
 	'''	
-	global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
+	global contCuadruplos; global cuadruplos; global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
 	if len(p)==7:
 		print(p[1])
 		idtmp1=globalMem.getSymIndx(p[1])	
 		s1=p[3]
+		if isinstance(p[3],str):
+			s1=globalMem.getSymVal(p[3])
 		base=globalMem.memory[idtmp1][4]
 		valor=p[6]
-		dirT=s1+base
-		memArreglos[int(dirT)]=valor
+		if isinstance(p[6],str):
+			valor=globalMem.getSymVal(p[6])
+		dirT=s1+base #memArreglos[int(dirT)]=valor
 		print(f'{p[1]}[{s1}]={valor}\tMemoria Global[{int(dirT)}]')
+		cTmp1=[]
+		cTmp1.append("DIR")
+		cTmp1.append(p[1])
+		cTmp1.append(int(dirT))
+		cTmp1.append(valor)
+		cuadruplos.append(cTmp1)
+		print(cuadruplos[-1])
+		contCuadruplos=contCuadruplos+1
 	if len(p)==9:
 		print(p[1])
 		idtmp1=globalMem.getSymIndx(p[1])
 		s1=p[3]
 		s2=p[5]
 		m1=globalMem.memory[idtmp1][7]
-		base=globalMem.memory[idtmp1][4]
-		valor=p[8]
-		dirT=s1*m1+s2+base
-		print(dirT)
-		memArreglos[int(dirT)]=valor
-		print(f'{p[1]}[{s1}][{s2}]={valor}\tMemoria Global[{int(dirT)}]')
+		base=globalMem.memory[idtmp1][4] #if isinstance(p[3],str):#s1=globalMem.getSymVal(p[3])
+		cTmp1=[]
+		cTmp1.append("*")
+		cTmp1.append(s1)
+		cTmp1.append(m1)
+		cTmp1.append("T"+str(avTmpsCount))
+		cuadruplos.append(cTmp1)
+		avTmps.append("T"+str(avTmpsCount)) 
+		pOps.insert(0,avTmps[-1])
+		contCuadruplos=contCuadruplos+1 #if isinstance(p[5],str):#s2=globalMem.getSymVal(p[5])
+		cTmp2=[]
+		cTmp2.append("+")
+		cTmp2.append(s2)
+		cTmp2.append(pOps.pop(0))
+		cTmp2.append("T"+str(avTmpsCount))
+		cuadruplos.append(cTmp2)
+		avTmps.append("T"+str(avTmpsCount)) 
+		pOps.insert(0,avTmps[-1])
+		contCuadruplos=contCuadruplos+1 # +base
+		cTmp3=[]
+		cTmp3.append("+")
+		cTmp3.append(pOps.pop(0))
+		cTmp3.append(base)
+		cTmp3.append("T"+str(avTmpsCount))
+		cuadruplos.append(cTmp3)
+		avTmps.append("T"+str(avTmpsCount)) 
+		pOps.insert(0,avTmps[-1])
+		contCuadruplos=contCuadruplos+1
+		valor=p[8] #if isinstance(p[8],str): #valor=globalMem.getSymVal(p[8]) #dirT=s1*m1+s2+base #print(dirT) #memArreglos[int(dirT)]=valor #print(f'{p[1]}[{s1}][{s2}]={valor}\tMemoria Global[{int(dirT)}]')
+		cTmp4=[]
+		cTmp4.append("DIR")
+		cTmp4.append(p[1])
+		cTmp4.append(pOps.pop(0))
+		cTmp4.append(valor)
+		cuadruplos.append(cTmp4)
+		print(cuadruplos[-1])
+		contCuadruplos=contCuadruplos+1
 	if len(p)==11:
 		print(p[1])
 		idtmp1=globalMem.getSymIndx(p[1])
 		s1=p[3]
 		s2=p[5]
 		s3=p[7]
+		if isinstance(p[3],str):
+			s1=globalMem.getSymVal(p[3])
+		if isinstance(p[5],str):
+			s2=globalMem.getSymVal(p[5])
+		if isinstance(p[7],str):
+			s3=globalMem.getSymVal(p[7])
 		m1=globalMem.memory[idtmp1][7]
 		m2=globalMem.memory[idtmp1][8]
 		base=globalMem.memory[idtmp1][4]
 		valor=p[10]
+		if isinstance(p[10],str):
+			valor=globalMem.getSymVal(p[10])
 		dirT=s1*m1+s2*m2+s3+base
-		print(dirT)
-		memArreglos[int(dirT)]=valor
+		print(dirT)#memArreglos[int(dirT)]=valor
 		print(f'{p[1]}[{s1}][{s2}][{s3}]={valor}\tMemoria Global[{int(dirT)}]')
 		print(idtmp1)
+		cTmp1=[]
+		cTmp1.append("DIR")
+		cTmp1.append(p[1])
+		cTmp1.append(int(dirT))
+		cTmp1.append(valor)
+		cuadruplos.append(cTmp1)
+		print(cuadruplos[-1])
+		contCuadruplos=contCuadruplos+1
 
 def p_ARR1(p):
 	'''
@@ -1032,8 +1091,8 @@ def p_BLOQUE(p):
 
 def p_BR(p):
 	'''
-	BR :     SEMICOLON ESTATUTO BR
-	        | 
+	BR : BR SEMICOLON ESTATUTO 
+	   | 
 	'''
 	
 def p_ESTATUTO(p): 
@@ -1059,7 +1118,6 @@ def p_THEN1(p):
 	cTmp="GTF "+str(resultado)
 	cTmp1=[]
 	#PRUEBA RODRIGO
-
 	cTmp1.append("GTF")
 	cTmp1.append(resultado)
 	cTmp1.append(None)
