@@ -768,7 +768,7 @@ def p_S(p):
 	tempo=0
 	for x in memArreglos:
 		if x!=None:
-			print(f'MemArrelgos{tempo} = {x}')
+			print(f'MA[{tempo}] = {x}')
 		tempo=tempo+1
 		
 
