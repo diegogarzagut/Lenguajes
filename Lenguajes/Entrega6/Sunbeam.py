@@ -314,7 +314,25 @@ def p_S(p):
 			PC=pExec.pop(0)
 		elif opscode=="DIR":
 			print("DIR")
-			memArreglos[cuadruplo[2]]=cuadruplo[3]
+			dirTmp=cuadruplo[2]
+			valueTmp=cuadruplo[3]
+			tmpq1=globalMem.getSymType(cuadruplo[3])
+			tmpq2=globalMem.getSymType(cuadruplo[2])
+			if len(str(dirTmp))>1:
+				if dirTmp[0]=='T':
+					tmp=dirTmp
+					tmp1=int(tmp[1:])
+					dirTmp=avTmps1[tmp1]
+			if len(str(valueTmp))>1:
+				if valueTmp[0]=='T':
+					tmp=valueTmp
+					tmp1=int(tmp[1:])
+					valueTmp=avTmps1[tmp1]
+			if tmpq1=="isvar":
+				valueTmp=globalMem.getSymVal(cuadruplo[3])
+			if tmpq2=="isvar":
+				dirTmp=globalMem.getSymVal(cuadruplo[2])
+			memArreglos[int(dirTmp)]=valueTmp
 			PC=PC+1
 		elif opscode=="PRINT":#globalMem.listMTable()
 			if isinstance(cuadruplo[1],str):
@@ -746,6 +764,12 @@ def p_S(p):
 	#for x in avTmps:
 	#	print(f'T{tempo} = {x}')
 	#	tempo=tempo+1
+	print("\n--- MemArreglos ---")
+	tempo=0
+	for x in memArreglos:
+		if x!=None:
+			print(f'MemArrelgos{tempo} = {x}')
+		tempo=tempo+1
 		
 
 def p_main(p):
