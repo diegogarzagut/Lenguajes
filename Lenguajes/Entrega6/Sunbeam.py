@@ -125,6 +125,7 @@ tokens = [
 	'LBRKT',
 	'RBRKT',
 	'DIR',
+	'GDIRV',
 	'sumMat',
 	'mulMat',
 	'MAINF'
@@ -167,6 +168,10 @@ def t_CALL(t):
 def t_DIR(t):
 	r'dir'
 	t.type = 'DIR'
+	return t 
+def t_GDIRV1(t):
+	r'gdirv'
+	t.type = 'GDIRV'
 	return t
 def t_LCOR(t):
 	r'\{'
@@ -371,6 +376,18 @@ def p_S(p):
 			if tmpq2=="isvar":
 				dirTmp=globalMem.getSymVal(cuadruplo[2])
 			memArreglos[int(dirTmp)]=valueTmp
+			PC=PC+1
+		elif opscode=="GDIRV":
+			dirTmp=cuadruplo[1]
+			tmpq2=globalMem.getSymType(cuadruplo[2])
+			if len(str(dirTmp))>1:
+				if dirTmp[0]=='T':
+					tmp=dirTmp
+					tmp1=int(tmp[1:])
+					dirTmp=avTmps1[tmp1]
+			if tmpq2=="isvar":
+				tmptmp=memArreglos[int(dirTmp)]
+				globalMem.updateVal(cuadruplo[2],tmptmp)
 			PC=PC+1
 		elif opscode=="PRINT":#globalMem.listMTable()
 			if isinstance(cuadruplo[1],str):
@@ -884,12 +901,13 @@ def p_vars0(p):
 		   | PRINT ID
 		   | CALLF
 		   | ID COLON LBRKT ARR1 RBRKT
-		   | DIR LBRKT DIR1 
+		   | DIR LBRKT DIR1
+		   | GDIRV LBRKT GDIRV1
 		   | sumMat sm1
 	       |
 	'''
 	global numDim; global pM; global pM1; global pM2; global pBases; global st; global avTmps1; global globalMem; global auxID; global auxT; global sym; global pOps; global avTmpsCount; global avTmps; global contCuadruplos; global pDirVal; global pDirValCont; global PC
-	if (p[1]=="dir"):#p[0]=p[2]
+	if (p[1]=="dir"): #p[0]=p[2]
 		print("dir")
 	if (len(p)==6):
 		auxID=p[1]
@@ -952,6 +970,76 @@ def p_vars0(p):
 		#avTmps.append(str(p[1]))
 		#pOps.insert(0,avTmps[-1])
 		#print(pOps)
+
+def p_GDIRV1(p):
+	'''
+	GDIRV1 : ID COMA ID COMA IDCTE RBRKT
+	       | ID COMA ID COMA IDCTE COMA IDCTE RBRKT
+		   | ID COMA ID COMA IDCTE COMA IDCTE COMA IDCTE RBRKT  
+	'''	
+	global contCuadruplos; global cuadruplos; global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
+	if len(p)==7:
+		idtmp1=globalMem.getSymIndx(p[3])
+		s1=p[5]
+		base=globalMem.memory[idtmp1][4] #if isinstance(p[3],str):#s1=globalMem.getSymVal(p[3])
+		cTmp1=[]
+		cTmp1.append("+")
+		cTmp1.append(s1)
+		cTmp1.append(base)
+		cTmp1.append("T"+str(avTmpsCount))
+		cuadruplos.append(cTmp1)
+		avTmps.append("T"+str(avTmpsCount)) 
+		pOps.insert(0,avTmps[-1])
+		contCuadruplos=contCuadruplos+1 #if isinstance(p[5],str):#s2=globalMem.getSymVal(p[5])
+		cTmp2=[]
+		cTmp2.append("=")
+		cTmp2.append(pOps.pop(0))
+		cTmp2.append(p[1])
+		cTmp2.append(None)
+		cuadruplos.append(cTmp2)
+		print(cuadruplos[-1])
+		contCuadruplos=contCuadruplos+1
+	if len(p)==9:
+		idtmp1=globalMem.getSymIndx(p[3])
+		s1=p[5]
+		s2=p[7]
+		m1=globalMem.memory[idtmp1][7]
+		base=globalMem.memory[idtmp1][4] #if isinstance(p[3],str):#s1=globalMem.getSymVal(p[3])
+		cTmp1=[]
+		cTmp1.append("*")
+		cTmp1.append(s1)
+		cTmp1.append(m1)
+		cTmp1.append("T"+str(avTmpsCount))
+		cuadruplos.append(cTmp1)
+		avTmps.append("T"+str(avTmpsCount)) 
+		pOps.insert(0,avTmps[-1])
+		contCuadruplos=contCuadruplos+1 #if isinstance(p[5],str):#s2=globalMem.getSymVal(p[5])
+		cTmp2=[]
+		cTmp2.append("+")
+		cTmp2.append(s2)
+		cTmp2.append(pOps.pop(0))
+		cTmp2.append("T"+str(avTmpsCount))
+		cuadruplos.append(cTmp2)
+		avTmps.append("T"+str(avTmpsCount)) 
+		pOps.insert(0,avTmps[-1])
+		contCuadruplos=contCuadruplos+1 # +base
+		cTmp3=[]
+		cTmp3.append("+")
+		cTmp3.append(pOps.pop(0))
+		cTmp3.append(base)
+		cTmp3.append("T"+str(avTmpsCount))
+		cuadruplos.append(cTmp3)
+		avTmps.append("T"+str(avTmpsCount)) 
+		pOps.insert(0,avTmps[-1])
+		contCuadruplos=contCuadruplos+1
+		cTmp4=[]
+		cTmp4.append("GDIRV")
+		cTmp4.append(pOps.pop(0)) # direc memarreglos
+		cTmp4.append(p[1]) # variable
+		cTmp4.append(None)
+		cuadruplos.append(cTmp4)
+		print(cuadruplos[-1])
+		contCuadruplos=contCuadruplos+1
 
 def p_sm1(p):
 	'''
