@@ -1322,7 +1322,7 @@ def p_MOD2(p):
 	cuadruplos.append(cTmp2)
 	print(cuadruplos[-1])
 	contCuadruplos=contCuadruplos+1
-	cuadruplos[0][1]=contCuadruplos
+	cuadruplos[0][1]=contCuadruplos 
 
 def p_BLOQUE(p):
 	'''
@@ -1710,10 +1710,19 @@ def p_error(p):
 
 parser = yacc.yacc()
 
+import os
+fileDir = os.path.dirname(os.path.realpath('_file_'))
+programa = 'test.txt'
+filename = os.path.join(fileDir, programa )
+f = open(filename, "r")
+input2 = f.read()
+yacc.parse(input2)
 
+'''
 while True:
 	try:
 		s = input('sunbeam > ')
 	except EOFError:
 		break
 	parser.parse(s)
+'''
