@@ -945,7 +945,7 @@ def p_vars0(p):
 	if (len(p)==4 and p[1]=="read"):
 		print(f'READ {p[3]}')
 		auxT="int"
-		symM=memoryST.Symbol_m(p[3],1,auxT,False,None,None,None,None,None,None,None,None)
+		symM=memoryST.Symbol_m(p[3],None,auxT,False,None,None,None,None,None,None,None,None)
 		globalMem.addSy(symM)
 		cTmp1=[]
 		cTmp1.append("READ")
@@ -1227,7 +1227,7 @@ def p_DIR1(p):
 def p_ARR1(p):
 	'''
 	ARR1 : CTE_INT
-	     | IDCTE COMA IDCTE
+	     | CTE_INT COMA CTE_INT
 		 | CTE_INT COMA CTE_INT COMA CTE_INT
 	'''	
 	global numDim; global pM; global pM1; global pM2; global pBases; global dimsize1; global dimsize2; global dimsize3; global M; global M1; global M2
@@ -1246,20 +1246,12 @@ def p_ARR1(p):
 		base=base+M
 		pBases.append(base)
 	elif len(p)==4:
-		s1=p[1]
-		s2=p[3]
-		tmpq1=globalMem.getSymType(p[1])
-		tmpq2=globalMem.getSymType(p[3])
-		if tmpq1=="isvar":
-			s1=globalMem.getSymVal(p[1])
-		if tmpq2=="isvar":
-			s2=globalMem.getSymVal(p[3])
 		numDim.append(2)
-		dimsize1.append(s1)
-		dimsize2.append(s2)
+		dimsize1.append(p[1])
+		dimsize2.append(p[3])
 		dimsize3.append(None)
-		M=s1*s2
-		M1=M/s1 #dimsize1
+		M=p[1]*p[3]
+		M1=M/p[1] #dimsize1
 		pM.append(M)
 		pM1.append(M1)
 		pM2.append(None)
@@ -1322,7 +1314,7 @@ def p_MOD2(p):
 	cuadruplos.append(cTmp2)
 	print(cuadruplos[-1])
 	contCuadruplos=contCuadruplos+1
-	cuadruplos[0][1]=contCuadruplos 
+	cuadruplos[0][1]=contCuadruplos
 
 def p_BLOQUE(p):
 	'''
@@ -1358,7 +1350,6 @@ def p_THEN1(p):
 	print(pOps)
 	cTmp="GTF "+str(resultado)
 	cTmp1=[]
-	#PRUEBA RODRIGO
 	cTmp1.append("GTF")
 	cTmp1.append(resultado)
 	cTmp1.append(None)
@@ -1709,7 +1700,7 @@ def p_error(p):
 		t=t+1
 
 parser = yacc.yacc()
-
+'''
 import os
 fileDir = os.path.dirname(os.path.realpath('_file_'))
 programa = 'test.txt'
@@ -1725,4 +1716,3 @@ while True:
 	except EOFError:
 		break
 	parser.parse(s)
-'''
